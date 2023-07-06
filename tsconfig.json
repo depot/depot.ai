@@ -1,13 +1,3 @@
 {
-  "compilerOptions": {
-    "noEmit": true,
-    "target": "esnext",
-    "module": "esnext",
-    "lib": ["esnext"],
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "types": ["@cloudflare/workers-types"],
-    "strict": true,
-    "skipLibCheck": true
-  }
+  "extends": "astro/tsconfigs/strictest"
 }

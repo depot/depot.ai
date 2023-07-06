@@ -1,17 +1,17 @@
+import {handle} from 'hono/cloudflare-pages'
 import {Hono} from 'hono'
 import {getMetadata} from './adapters/huggingface'
-import {Env} from './env'
+import type {Env} from './env'
 
-const app = new Hono<Env>()
+const app = new Hono<Env>().basePath('/v2')
 
 app.get('/', ({text}) => text('🔮'))
-app.get('/v2/', ({text}) => text('🔮'))
 
 const NAME_REGEX = /^[a-z0-9]+([._-][a-z0-9]+)*(\/[a-z0-9]+([._-][a-z0-9]+)*)*$/i
 const REFERENCE_REGEX = /^[a-zA-Z0-9_][a-zA-Z0-9._-]{0,127}$/i
 const DIGEST_REGEX = /sha256:[a-f0-9]{64}/
 
-app.get('/v2/:name{.*}/manifests/:reference', ({req, json}) => {
+app.get('/:name{.*}/manifests/:reference', ({req, json}) => {
   const name = req.param('name')
   const reference = req.param('reference')
 
@@ -22,7 +22,7 @@ app.get('/v2/:name{.*}/manifests/:reference', ({req, json}) => {
   return json({name, reference})
 })
 
-app.get('/v2/:name{.*}/blobs/:digest', ({req, json}) => {
+app.get('/:name{.*}/blobs/:digest', ({req, json}) => {
   const name = req.param('name')
   const digest = req.param('digest')
 
@@ -33,7 +33,7 @@ app.get('/v2/:name{.*}/blobs/:digest', ({req, json}) => {
   return json({name, digest})
 })
 
-app.get('/v2/:name{.*}/metadata/:reference', async ({req, json}) => {
+app.get('/:name{.*}/metadata/:reference', async ({req, json}) => {
   const name = req.param('name')
   const reference = req.param('reference')
 
@@ -59,6 +59,4 @@ app.get('/v2/:name{.*}/metadata/:reference', async ({req, json}) => {
 
 app.notFound(({json}) => json({errors: [{code: 'NOT_FOUND', message: 'not found'}]}, 404))
 
-export default {
-  fetch: app.fetch,
-} satisfies ExportedHandler<Env>
+export const onRequest = handle(app)

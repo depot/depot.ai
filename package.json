@@ -1,15 +1,30 @@
 {
+  "type": "module",
   "private": true,
   "scripts": {
+    "build": "astro build",
+    "dev:astro": "chokidar 'src/**/*' --initial -c 'astro build'",
+    "dev:wrangler": "wrangler pages dev ./dist --compatibility-date=2023-06-28 --r2 STORAGE --live-reload",
+    "dev": "concurrently -r --kill-others-on-fail -i pnpm:dev:wrangler pnpm:dev:astro",
     "fmt": "prettier --write .",
-    "fmt:check": "prettier --check ."
+    "fmt:check": "prettier --check .",
+    "preview": "wrangler pages dev ./dist"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^6.6.0",
+    "@astrojs/tailwind": "^4.0.0",
+    "astro": "^2.7.4",
+    "tailwindcss": "^3.0.24"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230518.0",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^8.2.0",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
+    "hono": "^3.2.7",
     "prettier": "^3.0.0",
     "prettier-plugin-astro": "^0.10.0",
     "prettier-plugin-organize-imports": "^3.2.2",
