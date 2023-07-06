@@ -2,11 +2,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "astro": "astro",
     "build": "astro build",
     "dev": "astro dev",
-    "preview": "wrangler pages dev ./dist",
-    "start": "astro dev"
+    "preview": "wrangler pages dev ./dist"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^6.6.0",
