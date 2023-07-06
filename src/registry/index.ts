@@ -1,5 +1,5 @@
-import {handle} from 'hono/cloudflare-pages'
 import {Hono} from 'hono'
+import {handle} from 'hono/cloudflare-pages'
 import {getMetadata} from './adapters/huggingface'
 import type {Env} from './env'
 

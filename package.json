@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "build": "astro build",
+    "dev": "concurrently -r --kill-others-on-fail -i pnpm:dev:wrangler pnpm:dev:astro",
     "dev:astro": "chokidar 'src/**/*' --initial -c 'astro build'",
     "dev:wrangler": "wrangler pages dev ./dist --compatibility-date=2023-06-28 --r2 STORAGE --live-reload",
-    "dev": "concurrently -r --kill-others-on-fail -i pnpm:dev:wrangler pnpm:dev:astro",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "preview": "wrangler pages dev ./dist"
