@@ -1,4 +1,5 @@
 ---
+import * as example from '../example.md'
 export const prerender = true
 ---
 
@@ -12,14 +13,47 @@ export const prerender = true
   </head>
 
   <body class="bg-radix-mauve-black text-radix-mauve12">
-    <div class="mx-auto my-16 max-w-prose">
-      <h1 class="text-6xl">🔮 depot.ai</h1>
+    <div class="mx-auto my-16 max-w-3xl space-y-8">
+      <div class="flex items-baseline justify-between gap-4 leading-none border-b border-radix-mauve6 pb-8">
+        <h1 class="text-6xl font-bold">depot.<span class="text-radix-grass11">ai</span></h1>
 
-      <div class="mt-16">
-        Easily embed machine learning models in your <code class="text-radix-amber11 bg-radix-amber3 p-1 rounded -m-1">
-          Dockerfile
-        </code>
+        <a href="https://depot.dev" class="flex gap-1 items-center">
+          <span class="text-radix-mauve11">Powered by</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="inline-block w-4 h-4"
+          >
+            <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+            ></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          <span class="font-bold">Depot</span>
+        </a>
       </div>
+
+      <div class="text-2xl text-radix-mauve11">
+        Embed machine learning models in your
+        <code class="text-radix-amber11 bg-radix-amber3 p-1 rounded -m-1">Dockerfile</code>.
+      </div>
+
+      <h2 class="text-2xl font-semibold">Example Usage</h2>
+
+      <div class="bg-radix-mauve1 -mx-8 p-8 rounded-xl text-sm border border-radix-mauve4">
+        <example.Content />
+      </div>
+
+      <pre></pre>
     </div>
   </body>
 </html>
