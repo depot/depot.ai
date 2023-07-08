@@ -54,6 +54,9 @@ importers:
       '@cloudflare/workers-types':
         specifier: ^4.20230628.0
         version: 4.20230628.0
+      typescript:
+        specifier: ^5.1.6
+        version: 5.1.6
       wrangler:
         specifier: ^3.1.2
         version: 3.1.2
@@ -75,6 +78,10 @@ importers:
       tailwindcss:
         specifier: ^3.3.2
         version: 3.3.2
+    devDependencies:
+      typescript:
+        specifier: ^5.1.6
+        version: 5.1.6
 
 packages:
 

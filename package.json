@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "fmt": "prettier --write .",
-    "fmt:check": "prettier --check ."
+    "fmt:check": "prettier --check .",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {},
   "devDependencies": {

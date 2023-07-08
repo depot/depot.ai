@@ -1,16 +1,15 @@
 name = "depot-ai"
-main = "registry/registry.ts"
+main = "./registry.ts"
 compatibility_date = "2023-06-28"
 routes = [{ pattern = "depot.ai/v2/*", zone_name = "depot.ai" }]
 
 [placement]
 mode = "smart"
 
+[vars]
+UPSTREAM_REGISTRY = "https://us-docker.pkg.dev/depot-gcp/depot-ai"
+
 [[r2_buckets]]
 binding = "storage"
 bucket_name = "depot-ai-live"
 preview_bucket_name = "depot-ai-preview"
-
-[[migrations]]
-tag = "v2"
-deleted_classes = ["UploadSession"]
