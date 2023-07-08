@@ -1,0 +1,30 @@
+name: Image Cleanup
+on:
+  schedule:
+    - cron: 0 0 * * * # Every day at midnight
+  workflow_dispatch: {}
+
+jobs:
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Authenticate with Artifact Registry
+        run: gcloud auth configure-docker us-docker.pkg.dev
+
+      - name: Clean up old container images
+        uses: docker://us-docker.pkg.dev/gcr-cleaner/gcr-cleaner/gcr-cleaner-cli
+        with:
+          args: >-
+            -repo=us-docker.pkg.dev/depot-gcp/depot-ai
+            -recursive
+            -grace=48h
+            -dry-run
