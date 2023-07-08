@@ -1,11 +1,21 @@
 {
   "folders": [{"path": "models"}, {"path": "registry"}, {"path": "website"}, {"path": ".", "name": "root"}],
   "settings": {
+    "npm.packageManager": "pnpm",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "typescript.tsdk": "node_modules/typescript/lib",
+    "prettier.prettierPath": "node_modules/prettier/index.cjs",
     "prettier.documentSelectors": ["**/*.astro"],
     "tailwindCSS.includeLanguages": {
       "astro": "html"
-    }
+    },
+    "[astro]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "eslint.lintTask.enable": true,
+    "eslint.lintTask.options": "--cache --cache-location node_modules/.cache/.eslintcache ."
   }
 }
