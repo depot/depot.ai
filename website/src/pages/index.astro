@@ -1,6 +1,15 @@
 ---
 import * as example from '../example.md'
+import * as yaml from 'js-yaml'
+import * as fsp from 'node:fs/promises'
 export const prerender = true
+
+interface Model {
+  name: string
+  sha: string
+}
+
+const {models} = yaml.load(await fsp.readFile('../models/models.yaml', 'utf8')) as {models: Model[]}
 ---
 
 <html lang="en">
@@ -13,7 +22,7 @@ export const prerender = true
   </head>
 
   <body class="bg-radix-mauve-black text-radix-mauve12">
-    <div class="mx-auto my-16 max-w-3xl space-y-8">
+    <div class="mx-auto my-16 max-w-3xl space-y-8 border border-radix-mauve6 rounded-xl p-8">
       <div class="flex items-baseline justify-between gap-4 leading-none border-b border-radix-mauve6 pb-8">
         <h1 class="text-6xl font-bold">depot.<span class="text-radix-grass11">ai</span></h1>
 
@@ -42,18 +51,37 @@ export const prerender = true
         </a>
       </div>
 
-      <div class="text-2xl text-radix-mauve11">
+      <div class="text-lg text-radix-mauve12 border-b border-radix-mauve6 pb-8">
         Embed machine learning models in your
         <code class="text-radix-amber11 bg-radix-amber3 p-1 rounded -m-1">Dockerfile</code>.
       </div>
 
-      <h2 class="text-2xl font-semibold">Example Usage</h2>
+      <h2 class="text-2xl font-semibold">Usage</h2>
 
-      <div class="bg-radix-mauve1 -mx-8 p-8 rounded-xl text-sm border border-radix-mauve4">
+      <div class="bg-radix-mauve1 -mx-8 p-8 text-sm border-y border-radix-mauve4">
         <example.Content />
       </div>
 
-      <pre></pre>
+      <h2 class="text-2xl font-semibold">Models</h2>
+
+      <div class="flex flex-col gap-4 flex-1">
+        {
+          models.map((model) => (
+            <a
+              href={`https://huggingface.co/${model.name}`}
+              class="bg-radix-mauve1 border border-radix-mauve6 px-4 py-4 rounded-lg"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div class="tracking-tight">
+                <span class="text-radix-mauve11">depot.ai/</span>
+                {model.name}
+                <span class="text-radix-mauve11">:latest</span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
     </div>
   </body>
 </html>

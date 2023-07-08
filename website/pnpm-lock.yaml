@@ -17,6 +17,9 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
+  js-yaml:
+    specifier: ^4.1.0
+    version: 4.1.0
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2
@@ -31,6 +34,9 @@ devDependencies:
   '@tailwindcss/typography':
     specifier: ^0.5.9
     version: 0.5.9(tailwindcss@3.3.2)
+  '@types/js-yaml':
+    specifier: ^4.0.5
+    version: 4.0.5
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.61.0
     version: 5.61.0(@typescript-eslint/parser@5.61.0)(eslint@8.44.0)(typescript@5.1.6)
@@ -1026,6 +1032,10 @@ packages:
     dependencies:
       '@types/unist': 3.0.0
     dev: false
+
+  /@types/js-yaml@4.0.5:
+    resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==}
+    dev: true
 
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
