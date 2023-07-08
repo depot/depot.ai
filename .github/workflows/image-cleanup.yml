@@ -26,5 +26,5 @@ jobs:
           args: >-
             -repo=us-docker.pkg.dev/depot-gcp/depot-ai
             -recursive
-            -grace=48h
+            -grace=2h
             -dry-run
