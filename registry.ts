@@ -34,37 +34,21 @@ app.get('/v2/:name{.*}/manifests/:reference', async ({req, env}) => {
   const name = req.param('name')
   const reference = req.param('reference')
 
-  let digest = parseDigest(reference)
   const tag = parseTag(reference)
-
-  // If tag is supplied, resolve it to a digest
-  if (tag) digest = await resolveTagToDigest(env, name, reference)
+  const digest = tag ? await resolveTagToDigest(env, name, tag) : parseDigest(reference)
   if (!digest) return json({errors: [{code: 'MANIFEST_UNKNOWN'}]}, {status: 404})
+  const key = `${name}/manifests/${digest.digest}`
 
   const headers = new Headers({
     'Docker-Content-Digest': digest.digest,
     'Docker-Distribution-Api-Version': 'registry/2.0',
   })
 
-  if (req.method === 'HEAD') {
-    let object = await env.storage.head(`${name}/manifests/${digest.digest}`)
-    if (!object) {
-      const res = await importManifest(env, name, digest)
-      if (!res.ok) return res
-      object = await env.storage.head(`${name}/manifests/${digest.digest}`)
-    }
-    if (object) {
-      object.writeHttpMetadata(headers)
-      headers.set('Content-Length', object.size.toString())
-      return emptyResponse({headers})
-    }
-    return json({errors: [{code: 'MANIFEST_UNKNOWN'}]}, {status: 404})
-  }
-
-  const object = await env.storage.get(`${name}/manifests/${digest.digest}`)
-  if (!object) return await importManifest(env, name, digest)
-  object.writeHttpMetadata(headers)
-  return response(object.body, {headers})
+  return pullThroughRegistry(
+    req,
+    () => getObject(req, env, key, headers),
+    () => importManifest(env, name, digest),
+  )
 })
 
 app.get('/v2/:name{.*}/blobs/:digest', async ({req, env}) => {
@@ -78,22 +62,11 @@ app.get('/v2/:name{.*}/blobs/:digest', async ({req, env}) => {
     'Docker-Distribution-Api-Version': 'registry/2.0',
   })
 
-  if (req.method === 'HEAD') {
-    let object = await env.storage.head(key)
-    if (!object) {
-      const res = await importBlob(env, name, digest)
-      if (!res.ok) return res
-      object = await env.storage.head(key)
-    }
-    if (!object) return json({errors: [{code: 'BLOB_UNKNOWN'}]}, {status: 404})
-    object.writeHttpMetadata(headers)
-    headers.set('Content-Length', object.size.toString())
-    return emptyResponse({headers})
-  }
-
-  const res = await getObject(req, env, key, headers)
-  if (!res) return importBlob(env, name, digest)
-  return res
+  return pullThroughRegistry(
+    req,
+    () => getObject(req, env, key, headers),
+    () => importBlob(env, name, digest),
+  )
 })
 
 app.notFound(({json}) => json({errors: [{code: 'NOT_FOUND', message: 'not found'}]}, 404))
@@ -126,6 +99,27 @@ function json(data: any, responseInit: ResponseInit = {}): Response {
 }
 
 let upstreamURL: URL | undefined
+
+async function pullThroughRegistry(
+  req: HonoRequest<any>,
+  fromR2: () => Promise<Response | null>,
+  fromRegistry: () => Promise<Response>,
+) {
+  if (req.method === 'HEAD') {
+    let object = await fromR2()
+    if (!object) {
+      const res = await fromRegistry()
+      if (!res.ok) return res
+      object = await fromR2()
+    }
+    if (!object) return json({errors: [{code: 'BLOB_UNKNOWN'}]}, {status: 404})
+    return object
+  }
+
+  const object = await fromR2()
+  if (!object) return fromRegistry()
+  return object
+}
 
 async function importManifest(env: Env['Bindings'], name: string, digest: Digest) {
   upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
@@ -206,13 +200,25 @@ async function resolveTagToDigest(env: Env['Bindings'], name: string, tag: strin
 }
 
 async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key: string, headers: Headers) {
+  if (req.method === 'HEAD') {
+    const obj = await env.storage.head(key)
+    if (!obj) return null
+    obj.writeHttpMetadata(headers)
+    headers.set('accept-ranges', 'bytes')
+    headers.set('etag', obj.httpEtag)
+    headers.set('content-length', obj.size.toString())
+    return emptyResponse({headers})
+  }
+
   const obj = await env.storage.get(key, {onlyIf: req.headers, range: req.headers})
   if (!obj) return null
 
   obj.writeHttpMetadata(headers)
   headers.set('etag', obj.httpEtag)
+  headers.set('accept-ranges', 'bytes')
 
   if (
+    req.headers.has('range') &&
     obj.range &&
     'offset' in obj.range &&
     'length' in obj.range &&
@@ -227,7 +233,7 @@ async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key: strin
 
   const body = 'body' in obj && obj.body ? obj.body : null
   const status = 'body' in obj && obj.body ? (req.headers.get('range') !== null ? 206 : 200) : 304
-  console.log('Handling with R2', key, status, obj.range, JSON.stringify([...headers.entries()]))
+  console.log('Handling with R2', key, status, obj.range, [...headers.entries()])
   return new Response(body, {headers, status})
 }
 
