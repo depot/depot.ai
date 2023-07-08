@@ -71,7 +71,7 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
         {
           models.map((model) => (
             <a
-              href={`https://huggingface.co/${model.name}`}
+              href={`https://huggingface.co/${model.name}/tree/${model.sha}`}
               class="bg-radix-mauve1 border border-radix-mauve6 px-4 py-4 rounded-lg"
               target="_blank"
               rel="noreferrer"
