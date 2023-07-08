@@ -1,30 +1,25 @@
 {
-  "type": "module",
   "private": true,
   "scripts": {
-    "build": "astro build",
-    "dev": "astro dev",
+    "build": "node -r esbuild-register ./build.ts",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
-    "preview": "astro preview"
+    "top": "node -r esbuild-register ./top.ts",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^6.6.0",
-    "@astrojs/tailwind": "^4.0.0",
-    "astro": "^2.8.0",
-    "date-fns": "^2.30.0",
-    "tailwindcss": "^3.3.2"
+    "execa": "^7.1.1",
+    "yaml": "^2.3.1"
   },
   "devDependencies": {
-    "@radix-ui/colors": "^1.0.0",
-    "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/typography": "^0.5.9",
+    "@types/node": "^20.4.1",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
+    "esbuild": "^0.18.11",
+    "esbuild-register": "^3.4.2",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^3.0.0",
-    "prettier-plugin-astro": "^0.10.0",
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-pkg": "^0.18.0",
     "typescript": "^5.1.6"
@@ -36,17 +31,8 @@
     "singleQuote": true,
     "trailingComma": "all",
     "plugins": [
-      "prettier-plugin-astro",
       "prettier-plugin-pkg",
       "prettier-plugin-organize-imports"
-    ],
-    "overrides": [
-      {
-        "files": "*.astro",
-        "options": {
-          "parser": "astro"
-        }
-      }
     ]
   }
 }

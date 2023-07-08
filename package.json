@@ -1,27 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
-    "logs": "wrangler tail",
-    "models:build": "node -r esbuild-register models/build.ts",
-    "models:top": "node -r esbuild-register models/top.ts",
     "type-check": "tsc --noEmit"
   },
-  "dependencies": {
-    "date-fns": "^2.30.0",
-    "hono": "^3.2.7",
-    "zod": "^3.21.4"
-  },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230628.0",
-    "@types/node": "^20.4.1",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
-    "esbuild": "^0.18.11",
-    "esbuild-register": "^3.4.2",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "execa": "^7.1.1",
@@ -29,9 +15,7 @@
     "prettier-plugin-astro": "^0.10.0",
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-pkg": "^0.18.0",
-    "typescript": "^5.1.6",
-    "wrangler": "^3.1.2",
-    "yaml": "^2.3.1"
+    "typescript": "^5.1.6"
   },
   "prettier": {
     "bracketSpacing": false,

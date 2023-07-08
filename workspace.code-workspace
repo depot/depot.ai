@@ -1,5 +1,5 @@
 {
-  "folders": [{"path": "website"}, {"path": "."}],
+  "folders": [{"path": "models"}, {"path": "registry"}, {"path": "website"}, {"path": ".", "name": "root"}],
   "settings": {
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "typescript.tsdk": "node_modules/typescript/lib",
