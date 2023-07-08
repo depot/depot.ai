@@ -2,6 +2,7 @@
 import * as example from '../example.md'
 import * as yaml from 'js-yaml'
 import * as fsp from 'node:fs/promises'
+import * as path from 'node:path'
 export const prerender = true
 
 interface Model {
@@ -9,7 +10,9 @@ interface Model {
   sha: string
 }
 
-const {models} = yaml.load(await fsp.readFile('../models/models.yaml', 'utf8')) as {models: Model[]}
+const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../models/models.yaml'), 'utf8')) as {
+  models: Model[]
+}
 ---
 
 <html lang="en">
