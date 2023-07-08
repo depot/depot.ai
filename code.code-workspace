@@ -1,0 +1,11 @@
+{
+  "folders": [{"path": "website"}, {"path": "."}],
+  "settings": {
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "prettier.documentSelectors": ["**/*.astro"],
+    "tailwindCSS.includeLanguages": {
+      "astro": "html"
+    }
+  }
+}
