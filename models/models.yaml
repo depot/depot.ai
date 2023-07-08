@@ -1,0 +1,5 @@
+models:
+  - name: jonatasgrosman/wav2vec2-large-xlsr-53-english
+    sha: 569a6236e92bd5f7652a0420bfe9bb94c5664080
+  - name: bert-base-uncased
+    sha: 1dbc166cf8765166998eff31ade2eb64c8a40076
