@@ -53,8 +53,8 @@ devDependencies:
     specifier: ^3.2.2
     version: 3.2.2(prettier@2.8.8)(typescript@5.1.6)
   prettier-plugin-pkg:
-    specifier: ^0.18.0
-    version: 0.18.0(prettier@2.8.8)
+    specifier: ^0.17.0
+    version: 0.17.0(prettier@2.8.8)
   typescript:
     specifier: ^5.1.6
     version: 5.1.6
@@ -3411,11 +3411,11 @@ packages:
       typescript: 5.1.6
     dev: true
 
-  /prettier-plugin-pkg@0.18.0(prettier@2.8.8):
-    resolution: {integrity: sha512-cme+OUHj25cVj3HwGK6ek/GkCHhlhM1u/IYspOHYsFImaXMJCmjs8xeCcvLreD0HMX5QxObot+3TtQR3Bd2wHw==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  /prettier-plugin-pkg@0.17.0(prettier@2.8.8):
+    resolution: {integrity: sha512-TwQqf8XT+esIy75Js4WywCjhhCya46uCX2kP3elgCmmHwP9twybGYJfZLYJ0wnKgkFUXjlAzDypbPcNXfJA/mg==}
+    engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     peerDependencies:
-      prettier: ^3.0.0
+      prettier: ^2.0.0
     dependencies:
       prettier: 2.8.8
     dev: true

@@ -4,8 +4,8 @@
   "scripts": {
     "build": "astro build",
     "dev": "astro dev",
-    "fmt": "prettier --write .",
-    "fmt:check": "prettier --check .",
+    "fmt": "prettier --write . src/**/*.astro",
+    "fmt:check": "prettier --check . src/**/*.astro",
     "preview": "astro preview"
   },
   "dependencies": {
@@ -26,7 +26,7 @@
     "prettier": "2.8.8",
     "prettier-plugin-astro": "^0.10.0",
     "prettier-plugin-organize-imports": "^3.2.2",
-    "prettier-plugin-pkg": "^0.18.0",
+    "prettier-plugin-pkg": "^0.17.0",
     "typescript": "^5.1.6"
   },
   "prettier": {
