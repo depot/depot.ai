@@ -23,10 +23,10 @@ async function main() {
       throw new Error('Usage: top.ts <topN> [outputFile]')
     })()
   if (args.length === 1) {
-    args.push('models/models.yaml')
+    args.push('models.yaml')
   }
   const topN = parseInt(args[0] || '100')
-  const outputFile = args[1] || 'models/models.yaml'
+  const outputFile = args[1] || 'models.yaml'
 
   const models = {models: await getTopHuggingFaceModels(topN)}
   const yaml = stringify(models)
