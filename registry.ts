@@ -1,7 +1,10 @@
 import type {HonoRequest} from 'hono'
+import {Hono} from 'hono'
 import {z} from 'zod'
 
-export interface Env {
+// Types **********************************************************************
+
+interface Env {
   Bindings: {
     storage: R2Bucket
     REGISTRY_TOKEN: string
@@ -9,18 +12,113 @@ export interface Env {
   }
 }
 
-export function response(bodyInit?: BodyInit | null | undefined, init: ResponseInit = {}): Response {
+// Routes *********************************************************************
+
+const app = new Hono<Env>()
+
+app.use('*', async (c, next) => {
+  c.executionCtx.passThroughOnException()
+  await next()
+})
+
+app.use('*', async (c, next) => {
+  console.log('START', c.req.method, c.req.url)
+  await next()
+  console.log('END', c.req.method, c.req.url, c.res.status)
+})
+
+app.get('/', ({text}) => text('🔮'))
+app.get('/v2/', ({text}) => text('🔮'))
+
+app.get('/v2/:name{.*}/manifests/:reference', async ({req, env}) => {
+  const name = req.param('name')
+  const reference = req.param('reference')
+
+  let digest = parseDigest(reference)
+  const tag = parseTag(reference)
+
+  // If tag is supplied, resolve it to a digest
+  if (tag) digest = await resolveTagToDigest(env, name, reference)
+  if (!digest) return json({errors: [{code: 'MANIFEST_UNKNOWN'}]}, {status: 404})
+
+  const headers = new Headers({
+    'Docker-Content-Digest': digest.digest,
+    'Docker-Distribution-Api-Version': 'registry/2.0',
+  })
+
+  if (req.method === 'HEAD') {
+    let object = await env.storage.head(`${name}/manifests/${digest.digest}`)
+    if (!object) {
+      const res = await importManifest(env, name, digest)
+      if (!res.ok) return res
+      object = await env.storage.head(`${name}/manifests/${digest.digest}`)
+    }
+    if (object) {
+      object.writeHttpMetadata(headers)
+      headers.set('Content-Length', object.size.toString())
+      return emptyResponse({headers})
+    }
+    return json({errors: [{code: 'MANIFEST_UNKNOWN'}]}, {status: 404})
+  }
+
+  const object = await env.storage.get(`${name}/manifests/${digest.digest}`)
+  if (!object) return await importManifest(env, name, digest)
+  object.writeHttpMetadata(headers)
+  return response(object.body, {headers})
+})
+
+app.get('/v2/:name{.*}/blobs/:digest', async ({req, env}) => {
+  const name = req.param('name')
+  const digest = parseDigest(req.param('digest'))
+  if (!digest) return json({errors: [{code: 'BLOB_UNKNOWN'}]}, {status: 404})
+  const key = `${name}/blobs/${digest.digest}`
+
+  const headers = new Headers({
+    'Docker-Content-Digest': digest.digest,
+    'Docker-Distribution-Api-Version': 'registry/2.0',
+  })
+
+  if (req.method === 'HEAD') {
+    let object = await env.storage.head(key)
+    if (!object) {
+      const res = await importBlob(env, name, digest)
+      if (!res.ok) return res
+      object = await env.storage.head(key)
+    }
+    if (!object) return json({errors: [{code: 'BLOB_UNKNOWN'}]}, {status: 404})
+    object.writeHttpMetadata(headers)
+    headers.set('Content-Length', object.size.toString())
+    return emptyResponse({headers})
+  }
+
+  const res = await getObject(req, env, key, headers)
+  if (!res) return importBlob(env, name, digest)
+  return res
+})
+
+app.notFound(({json}) => json({errors: [{code: 'NOT_FOUND', message: 'not found'}]}, 404))
+
+app.onError((err, {json}) => {
+  console.log(err)
+  return json({errors: [{code: 'INTERNAL_ERROR', message: err.message}]}, 500)
+})
+
+export default app
+
+// Utils **********************************************************************
+
+function response(bodyInit?: BodyInit | null | undefined, init: ResponseInit = {}): Response {
   const headers = new Headers(init.headers || {})
   headers.set('Docker-Distribution-API-Version', 'registry/2.0')
   init.headers = headers
   return new Response(bodyInit, init)
 }
 
-export function emptyResponse(responseInit?: ResponseInit): Response {
+function emptyResponse(responseInit?: ResponseInit): Response {
   return response(null, responseInit)
 }
 
-export function json(data: any, responseInit: ResponseInit = {}): Response {
+function json(data: any, responseInit: ResponseInit = {}): Response {
   const headers = new Headers(responseInit.headers ?? {})
   headers.set('Content-Type', 'application/json')
   responseInit.headers = headers
@@ -29,7 +127,7 @@ export function json(data: any, responseInit: ResponseInit = {}): Response {
 
 let upstreamURL: URL | undefined
 
-export async function importManifest(env: Env['Bindings'], name: string, digest: Digest) {
+async function importManifest(env: Env['Bindings'], name: string, digest: Digest) {
   upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
 
   const url = new URL(`https://registry/v2/${upstreamURL.pathname}/${name}/manifests/${digest.digest}`)
@@ -56,7 +154,7 @@ export async function importManifest(env: Env['Bindings'], name: string, digest:
   return new Response(obj.body, res)
 }
 
-export async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
+async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
   upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
 
   const url = new URL(`https://registry/v2/${upstreamURL.pathname}/${name}/blobs/${digest.digest}`)
@@ -83,7 +181,7 @@ export async function importBlob(env: Env['Bindings'], name: string, digest: Dig
   return new Response(obj.body, res)
 }
 
-export async function resolveTagToDigest(env: Env['Bindings'], name: string, tag: string) {
+async function resolveTagToDigest(env: Env['Bindings'], name: string, tag: string) {
   const obj = await env.storage.get(`${name}/tags/${tag}`)
   if (obj) return parseDigest(await obj.text())
 
@@ -107,7 +205,7 @@ export async function resolveTagToDigest(env: Env['Bindings'], name: string, tag
   return parseDigest(digest)
 }
 
-export async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key: string, headers: Headers) {
+async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key: string, headers: Headers) {
   const obj = await env.storage.get(key, {onlyIf: req.headers, range: req.headers})
   if (!obj) return null
 
@@ -135,19 +233,19 @@ export async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key
 
 const tagSchema = z.string().regex(/^[\w][\w.-]{0,127}$/)
 
-export function parseTag(candidate: string) {
+function parseTag(candidate: string) {
   const result = tagSchema.safeParse(candidate)
   return result.success ? result.data : null
 }
 
-export interface Digest {
+interface Digest {
   readonly algorithm: 'sha256' | 'sha384' | 'sha512'
   readonly hash: string
   readonly digest: string
 }
 
 const digestSchema = z.string().regex(/^[a-z0-9]+(?:[.+_-][a-z0-9]+)*:[a-zA-Z0-9=_-]+$/)
-export function parseDigest(candidate: string): Digest | null {
+function parseDigest(candidate: string): Digest | null {
   const result = digestSchema.safeParse(candidate)
   if (!result.success) return null
   const [algorithm, hash] = result.data.split(':')
