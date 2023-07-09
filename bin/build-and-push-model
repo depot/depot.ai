@@ -20,4 +20,4 @@ depot build . \
   --build-arg "MODEL=${name}" \
   --build-arg "SHA=${sha}" \
   --build-arg "SOURCE_DATE_EPOCH=0" \
-  --output "type=image,name=us-docker.pkg.dev/depot-gcp/depot-ai/${name}:${tag},push=true,compression=estargz,oci-mediatypes=true,${annotations}"
+  --output "type=image,name=us-docker.pkg.dev/depot-gcp/depot-ai/${name}:${tag},push=true,compression=estargz,oci-mediatypes=true,force-compression=true,${annotations}"
