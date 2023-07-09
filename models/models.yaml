@@ -1,5 +1,16 @@
 models:
   - name: jonatasgrosman/wav2vec2-large-xlsr-53-english
     sha: 569a6236e92bd5f7652a0420bfe9bb94c5664080
+    tagAs: latest
   - name: bert-base-uncased
     sha: 1dbc166cf8765166998eff31ade2eb64c8a40076
+    tagAs: latest
+  - name: xlm-roberta-large
+    sha: 5bc772e3200d64d987707aa9e9dfcca44b1f8da2
+    tagAs: latest
+  - name: sociocom/medner-cr-ja
+    sha: 4c64fb004a42e1282868fbd4719839ac39d5652c
+    tagAs: latest
+  - name: openai/clip-vit-large-patch14
+    sha: 8d052a0f05efbaefbc9e8786ba291cfdf93e5bff
+    tagAs: latest
