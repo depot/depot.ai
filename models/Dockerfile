@@ -8,15 +8,19 @@ FROM debian:12-slim as downloader
 # --provenance=false .
 ARG MODEL
 ARG SHA
+ARG SOURCE_DATE_EPOCH
 
 RUN apt-get update \
- && apt-get install -y --no-install-recommends git-lfs=3.3.0-1+b5 ca-certificates \
- && git lfs install \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+  && apt-get install -y --no-install-recommends git-lfs=3.3.0-1+b5 ca-certificates \
+  && git lfs install \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
-
-RUN git clone https://huggingface.co/${MODEL} /model && cd /model && git checkout ${SHA} && rm -rf /model/.git
+RUN git clone https://huggingface.co/${MODEL} /model && \
+  cd /model && \
+  git checkout ${SHA} && \
+  rm -rf /model/.git && \
+  find $( ls /model | grep -E -v "^(dev|mnt|proc|sys)$" ) -newermt "@${SOURCE_DATE_EPOCH}" -writable -xdev | xargs touch --date="@${SOURCE_DATE_EPOCH}" --no-dereference
 
 FROM scratch as model
 
