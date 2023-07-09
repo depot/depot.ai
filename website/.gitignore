@@ -1,6 +1,0 @@
-.wrangler/
-dist/
-node_modules/
-functions/index.js
-*.log
-.dev.vars

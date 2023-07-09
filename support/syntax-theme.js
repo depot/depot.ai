@@ -648,4 +648,4 @@ function getTheme() {
   }
 }
 
-module.exports = getTheme()
+export default getTheme()
