@@ -56,7 +56,17 @@ export default function Index() {
         <Example />
       </div>
 
-      <h2 className="text-2xl font-semibold">Models</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold">Models</h2>
+
+        <div className="text-sm text-radix-mauve11 text-right">
+          Missing a model?{' '}
+          <a href="https://github.com/depot/depot.ai#add-a-model" className="text-radix-mauve12">
+            Open a PR
+          </a>
+          !
+        </div>
+      </div>
 
       <div className="flex flex-col gap-4 flex-1">
         {models.map((model) => (
