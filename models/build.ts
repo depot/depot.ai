@@ -1,3 +1,4 @@
+import {$} from 'execa'
 import * as fsp from 'node:fs/promises'
 import {parse} from 'yaml'
 

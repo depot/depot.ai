@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 <model-name> <sha> [tag]"
+  exit 1
+fi
+
+name=$1
+sha=$2
+tag=${3:-latest}
+
+annotations="annotation.org.opencontainers.image.revision=${sha},annotation.org.opencontainers.image.source=https://huggingface.co/${name},annotation-index.org.opencontainers.image.revision=${sha},annotation-index.org.opencontainers.image.source=https://huggingface.co/${name},annotation-manifest-descriptor.org.opencontainers.image.revision=${sha},annotation-manifest-descriptor.org.opencontainers.image.source=https://huggingface.co/${name}"
+
+depot build . \
+  -f "${SCRIPT_DIR}/../models/Dockerfile" \
+  --platform linux/amd64,linux/arm64 \
+  --build-arg "MODEL=${name}" \
+  --build-arg "SHA=${sha}" \
+  --build-arg "SOURCE_DATE_EPOCH=0" \
+  --output "type=image,name=us-docker.pkg.dev/depot-gcp/depot-ai/${name}:${tag},push=true,compression=estargz,oci-mediatypes=true,${annotations}"
