@@ -6,6 +6,7 @@
     "dev": "remix dev --no-restart -c \"npm run start\"",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
+    "logs": "wrangler pages deployment tail --project-name depot-ai",
     "start": "wrangler pages dev --r2 storage --compatibility-date=2023-06-21 ./public",
     "type-check": "tsc --noEmit"
   },
