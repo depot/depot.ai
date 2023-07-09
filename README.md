@@ -8,7 +8,9 @@ The registry serves the [top 100 models](https://huggingface.co/models?sort=down
 
 - [Usage](#usage)
 - [How it works](#how-it-works)
-- [Add a Model](#add-a-model)
+- [Contributing](#contributing)
+  - [Add a Model](#add-a-model)
+- [License](#license)
 
 ## Usage
 
@@ -24,6 +26,18 @@ COPY --link --from=depot.ai/runwayml/stable-diffusion-v1-5 / .
 COPY --link --from=depot.ai/runwayml/stable-diffusion-v1-5 /v1-5-pruned.ckpt .
 ```
 
+👉 **If you build images with [Depot](https://depot.dev), this is all you need to do!** Depot is preconfigured to use BuildKit and eStargz to optimially build your image with the `COPY` command. If you `COPY` specific files from a model repo, Depot will pull just those files from the model image, rather than the entire repo contents, speeding up your build.
+
+Otherwise, if you are not using Depot and would like the same lazy-loading support, you will need to do two things:
+
+1. You will need to use [BuildKit](https://docs.docker.com/build/buildkit/) as your Docker build engine. If you are using Docker Desktop or Docker Engine v23.0 or newer, BuildKit is the default build engine. If you are using Docker Buildx, you are using BuildKit (see below about enabling support for lazy-pulling with eStargz). And if you are using an older version of Docker Engine, you can enable BuildKit by setting the `DOCKER_BUILDKIT=1` environment variable.
+
+2. To enable lazy-pulling of just the files you need, you will also need to enable support for [eStargz](https://github.com/containerd/stargz-snapshotter/blob/main/docs/estargz.md). This means that BuildKit will only fetch the files you need from the image, rather than downloading the entire repo contents. To enable eStargz. For this, you will need to use BuildKit with Docker Buildx, and create a new builder with the following command:
+
+   ```bash
+   docker buildx create --use --buildkitd-flags '--oci-worker-snapshotter=stargz'
+   ```
+
 ## How it works
 
 Each model is published as a Docker image containing the model contents as a single layer. Conceptually, the image is constructed like:
@@ -38,7 +52,11 @@ Finally, the image layer is built with two specific techniques:
 1. We set [SOURCE_DATE_EPOCH](https://github.com/moby/buildkit/blob/master/docs/build-repro.md#source_date_epoch) to `0`, which sets the file created time to the Unix epoch. This ensures that the image layer is reproducible, meaning if the model file contents inside have not changed, the build produces the same layer.
 2. The image is compressed with [eStargz](https://github.com/containerd/stargz-snapshotter/blob/main/docs/estargz.md), which creates an index of the files inside the layer and enables lazy-pulling of just the files requested by the `COPY` command. This means that if you want to include just one file from an otherwise large model repo, BuildKit will only copy that one file into your image.
 
-## Add a Model
+## Contributing
+
+Contributions are welcome!
+
+### Add a Model
 
 The models that `depot.ai` serves are defined in `models/models.yaml` — you can fork this repo, add an additional model entry, and submit a PR to add another model. Once the PR merges, GitHub Actions will automatically build and publish it:
 
@@ -47,3 +65,7 @@ The models that `depot.ai` serves are defined in `models/models.yaml` — you ca
   sha: 1234567890abcdef1234567890abcdef12345678
   tag: latest
 ```
+
+## License
+
+MIT License, see [LICENSE](./LICENSE).
