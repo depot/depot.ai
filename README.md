@@ -18,6 +18,8 @@ COPY --link --from=depot.ai/runwayml/stable-diffusion-v1-5 / .
 COPY --link --from=depot.ai/runwayml/stable-diffusion-v1-5 /v1-5-pruned.ckpt .
 ```
 
+## How it works
+
 ## Add a Model
 
 The models that `depot.ai` serves are defined in `models/models.yaml` — you can fork this repo, add an additional model entry, and submit a PR to add another model. Once the PR merges, GitHub Actions will automatically build and publish it:

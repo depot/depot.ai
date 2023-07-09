@@ -1,9 +1,6 @@
-.DS_Store
-node_modules
-
-/.cache
-/.wrangler
-/functions/\[\[path\]\].js
-/functions/\[\[path\]\].js.map
-/public/build
+.wrangler/
+dist/
+node_modules/
+functions/index.js
+*.log
 .dev.vars

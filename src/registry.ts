@@ -1,19 +1,6 @@
-import {ActionFunction, LoaderFunction} from '@remix-run/cloudflare'
 import type {HonoRequest} from 'hono'
 import {Hono} from 'hono'
 import {z} from 'zod'
-
-const upstreamURL = new URL('https://us-docker.pkg.dev/depot-gcp/depot-ai')
-
-export const loader: LoaderFunction = ({context, request}) => {
-  console.log(context)
-  console.log(context.env)
-  return app.fetch(request, context.env, context)
-}
-
-export const action: ActionFunction = ({context, request}) => {
-  return app.fetch(request, context.env, context)
-}
 
 // Types **********************************************************************
 
@@ -89,6 +76,8 @@ app.onError((err, {json}) => {
   return json({errors: [{code: 'INTERNAL_ERROR', message: err.message}]}, 500)
 })
 
+export default app
+
 // Utils **********************************************************************
 
 function response(bodyInit?: BodyInit | null | undefined, init: ResponseInit = {}): Response {
@@ -108,6 +97,8 @@ function json(data: any, responseInit: ResponseInit = {}): Response {
   responseInit.headers = headers
   return response(JSON.stringify(data), responseInit)
 }
+
+let upstreamURL: URL | undefined
 
 async function pullThroughRegistry(
   req: HonoRequest<any>,
@@ -131,6 +122,8 @@ async function pullThroughRegistry(
 }
 
 async function importManifest(env: Env['Bindings'], name: string, digest: Digest) {
+  upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
+
   const url = new URL(`https://registry/v2/${upstreamURL.pathname}/${name}/manifests/${digest.digest}`)
   url.protocol = upstreamURL.protocol
   url.hostname = upstreamURL.hostname
@@ -156,6 +149,8 @@ async function importManifest(env: Env['Bindings'], name: string, digest: Digest
 }
 
 async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
+  upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
+
   const url = new URL(`https://registry/v2/${upstreamURL.pathname}/${name}/blobs/${digest.digest}`)
   url.protocol = upstreamURL.protocol
   url.hostname = upstreamURL.hostname
@@ -183,6 +178,8 @@ async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
 async function resolveTagToDigest(env: Env['Bindings'], name: string, tag: string) {
   const obj = await env.storage.get(`${name}/tags/${tag}`)
   if (obj) return parseDigest(await obj.text())
+
+  upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
 
   const url = new URL(`https://registry/v2/${upstreamURL.pathname}/${name}/manifests/${tag}`)
   url.protocol = upstreamURL.protocol
