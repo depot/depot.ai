@@ -52,6 +52,10 @@ Finally, the image layer is built with two specific techniques:
 1. We set [SOURCE_DATE_EPOCH](https://github.com/moby/buildkit/blob/master/docs/build-repro.md#source_date_epoch) to `0`, which sets the file created time to the Unix epoch. This ensures that the image layer is reproducible, meaning if the model file contents inside have not changed, the build produces the same layer.
 2. The image is compressed with [eStargz](https://github.com/containerd/stargz-snapshotter/blob/main/docs/estargz.md), which creates an index of the files inside the layer and enables lazy-pulling of just the files requested by the `COPY` command. This means that if you want to include just one file from an otherwise large model repo, BuildKit will only copy that one file into your image.
 
+See the [Dockerfile](./models/Dockerfile) for the full implementation.
+
+We publish images to a private [Artifact Registry](https://cloud.google.com/artifact-registry) as a temporary storage location, then a [Cloudflare Worker](./src/registry.ts) imports the image from Artifact Registry, stores it in R2, and serves it as a public Docker registry.
+
 ## Contributing
 
 Contributions are welcome!

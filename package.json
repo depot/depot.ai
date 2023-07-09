@@ -12,6 +12,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@types/node": "^20.4.1",
     "hono": "^3.2.7",
     "yaml": "^2.3.1",
     "zod": "^3.21.4"
