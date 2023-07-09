@@ -14,16 +14,16 @@ The registry serves the [top 100 models](https://huggingface.co/models?sort=down
 
 ## Usage
 
-Each of [the models](https://depot.ai#models) are published as a Docker image, named after the Hugging Face repository. For example, the [stable-diffusion-v1-5](https://depot.ai/runwayml/stable-diffusion-v1-5) model is published as `depot.ai/runwayml/stable-diffusion-v1-5`.
+Each of [model](https://depot.ai#models) is published as a Docker image, named after its Hugging Face repository. For example, the [stable-diffusion-v1-5](https://depot.ai/runwayml/stable-diffusion-v1-5) model is published as `depot.ai/runwayml/stable-diffusion-v1-5`.
 
 You can then use the `COPY --from` command in your `Dockerfile` to copy the model contents into your own image:
 
 ```dockerfile
 # Copy all files from the model repo to the current WORKDIR
-COPY --link --from=depot.ai/runwayml/stable-diffusion-v1-5 / .
+COPY --from=depot.ai/runwayml/stable-diffusion-v1-5 / .
 
 # COPY just one file from the model repo to the current WORKDIR
-COPY --link --from=depot.ai/runwayml/stable-diffusion-v1-5 /v1-5-pruned.ckpt .
+COPY --from=depot.ai/runwayml/stable-diffusion-v1-5 /v1-5-pruned.ckpt .
 ```
 
 👉 **If you build images with [Depot](https://depot.dev), this is all you need to do!** Depot is preconfigured to use BuildKit and eStargz to optimially build your image with the `COPY` command. If you `COPY` specific files from a model repo, Depot will pull just those files from the model image, rather than the entire repo contents, speeding up your build.
