@@ -4,9 +4,10 @@ import {useCopyToClipboard} from '../hooks/useCopyToClipboard'
 export interface ModelProps {
   name: string
   sha: string
+  tagAs: string
 }
 
-export function Model({name, sha}: ModelProps) {
+export function Model({name, sha, tagAs}: ModelProps) {
   const [copied, setCopied] = useState(false)
   const [value, copy] = useCopyToClipboard()
   useEffect(() => {
@@ -22,13 +23,13 @@ export function Model({name, sha}: ModelProps) {
     <div className="bg-radix-mauve1 border border-radix-mauve6 px-4 py-4 rounded-lg gap-2 flex items-center leading-none justify-between">
       <div
         className="flex items-center cursor-pointer gap-3"
-        onClick={() => copy(`COPY --link --from=depot.ai/${name}:latest / .`)}
+        onClick={() => copy(`COPY --link --from=depot.ai/${name}:${tagAs} / .`)}
       >
         <CopyIcon className="text-radix-mauve10" />
         <div className="tracking-tight text-lg">
           <span className="text-radix-mauve11">depot.ai/</span>
           {name}
-          <span className="text-radix-mauve11">:latest</span>
+          <span className="text-radix-mauve11">:{tagAs}</span>
         </div>
       </div>
       {copied && (
