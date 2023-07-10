@@ -35,11 +35,14 @@ async function main() {
     } catch {}
 
     if (revisionSHA === model.sha) {
-      console.log(`Skipping ${model.name} because it's already built`)
-      continue
+      console.log(`Skipping build for depot.ai/${model.name}:${model.tagAs} because it's already built`)
+    } else {
+      console.log(`Building depot.ai/${model.name}:${model.tagAs}...`)
+      await $({stdio: 'inherit'})`./bin/build-and-push-model ${model.name} ${model.sha} ${model.tagAs}`
     }
 
-    await $({stdio: 'inherit'})`./bin/build-and-push-model ${model.name} ${model.sha} ${model.tagAs}`
+    console.log(`Importing depot.ai/${model.name}:${model.tagAs}...`)
+    await $({stdio: 'inherit'})`curl -X POST https://depot.ai/v2/${model.name}/manifests/${model.tagAs}/_import`
   }
   console.log('Done!')
 }
