@@ -122,17 +122,7 @@ async function pullThroughRegistry(
 }
 
 async function importManifest(env: Env['Bindings'], name: string, digest: Digest) {
-  upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
-
-  const url = new URL(`https://registry/v2/${upstreamURL.pathname}/${name}/manifests/${digest.digest}`)
-  url.protocol = upstreamURL.protocol
-  url.hostname = upstreamURL.hostname
-
-  const headers = new Headers()
-  headers.set('accept', '*/*')
-  headers.set('authorization', `Basic ${env.REGISTRY_TOKEN}`)
-
-  const res = await fetch(url, {headers})
+  const res = await fetchFromRegistry(env, `https://registry/v2/${name}/manifests/${digest.digest}`)
   if (!res.ok || !res.body) return res
 
   await env.storage.put(`${name}/manifests/${digest.digest}`, res.body, {
@@ -149,17 +139,7 @@ async function importManifest(env: Env['Bindings'], name: string, digest: Digest
 }
 
 async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
-  upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
-
-  const url = new URL(`https://registry/v2/${upstreamURL.pathname}/${name}/blobs/${digest.digest}`)
-  url.protocol = upstreamURL.protocol
-  url.hostname = upstreamURL.hostname
-
-  const headers = new Headers()
-  headers.set('accept', '*/*')
-  headers.set('authorization', `Basic ${env.REGISTRY_TOKEN}`)
-
-  const res = await fetch(url, {headers})
+  const res = await fetchFromRegistry(env, `https://registry/v2/${name}/blobs/${digest.digest}`)
   if (!res.ok || !res.body) return res
 
   await env.storage.put(`${name}/blobs/${digest.digest}`, res.body, {
@@ -179,17 +159,7 @@ async function resolveTagToDigest(env: Env['Bindings'], name: string, tag: strin
   const obj = await env.storage.get(`${name}/tags/${tag}`)
   if (obj) return parseDigest(await obj.text())
 
-  upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
-
-  const url = new URL(`https://registry/v2/${upstreamURL.pathname}/${name}/manifests/${tag}`)
-  url.protocol = upstreamURL.protocol
-  url.hostname = upstreamURL.hostname
-
-  const headers = new Headers()
-  headers.set('accept', '*/*')
-  headers.set('authorization', `Basic ${env.REGISTRY_TOKEN}`)
-
-  const res = await fetch(url, {headers})
+  const res = await fetchFromRegistry(env, `https://registry/v2/${name}/manifests/${tag}`)
   if (!res.ok) return null
 
   const digest = res.headers.get('Docker-Content-Digest')
@@ -197,6 +167,21 @@ async function resolveTagToDigest(env: Env['Bindings'], name: string, tag: strin
 
   await env.storage.put(`${name}/tags/${tag}`, digest)
   return parseDigest(digest)
+}
+
+async function fetchFromRegistry(env: Env['Bindings'], url: string, init: RequestInit = {}) {
+  upstreamURL = upstreamURL ?? new URL(env.UPSTREAM_REGISTRY)
+
+  const registryURL = new URL(url)
+  registryURL.protocol = upstreamURL.protocol
+  registryURL.hostname = upstreamURL.hostname
+  registryURL.pathname = registryURL.pathname.replace(/^\/v2\//, `/v2/${upstreamURL.pathname}`)
+
+  const headers = new Headers(init.headers)
+  headers.set('accept', '*/*')
+  headers.set('authorization', `Basic ${env.REGISTRY_TOKEN}`)
+
+  return await fetch(registryURL, {...init, headers})
 }
 
 async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key: string, headers: Headers) {
