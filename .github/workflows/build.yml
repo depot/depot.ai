@@ -1,4 +1,4 @@
-name: build
+name: Build
 on:
   push:
     branches:
@@ -7,10 +7,12 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
+    concurrency: build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
