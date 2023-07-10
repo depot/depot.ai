@@ -3,11 +3,15 @@ import * as example from '../examples/example.md'
 import * as yaml from 'js-yaml'
 import * as fsp from 'node:fs/promises'
 import * as path from 'node:path'
+import {Model} from '../components/Model'
+
 export const prerender = true
+
 interface Model {
   name: string
   sha: string
 }
+
 const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../models/models.yaml'), 'utf8')) as {
   models: Model[]
 }
@@ -20,6 +24,14 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>depot.ai</title>
+    <style is:global>
+      @media (prefers-reduced-motion: no-preference) {
+        .animate-pulse-slow {
+          @apply animate-pulse;
+          animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+      }
+    </style>
   </head>
 
   <body class="bg-radix-mauve-black text-radix-mauve12">
@@ -77,18 +89,7 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
       <div class="flex flex-col gap-4 flex-1">
         {
           models.map((model) => (
-            <a
-              href={`https://huggingface.co/${model.name}/tree/${model.sha}`}
-              class="bg-radix-mauve1 border border-radix-mauve6 px-4 py-4 rounded-lg"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div class="tracking-tight">
-                <span class="text-radix-mauve11">depot.ai/</span>
-                {model.name}
-                <span class="text-radix-mauve11">:latest</span>
-              </div>
-            </a>
+            <Model name={model.name} sha={model.sha} client:idle />
           ))
         }
       </div>
