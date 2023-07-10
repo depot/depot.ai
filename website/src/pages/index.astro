@@ -10,6 +10,7 @@ export const prerender = true
 interface Model {
   name: string
   sha: string
+  tagAs: string
 }
 
 const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../models/models.yaml'), 'utf8')) as {
@@ -89,7 +90,7 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
       <div class="flex flex-col gap-4 flex-1">
         {
           models.map((model) => (
-            <Model name={model.name} sha={model.sha} client:idle />
+            <Model name={model.name} sha={model.sha} tagAs={model.tagAs} client:idle />
           ))
         }
       </div>
