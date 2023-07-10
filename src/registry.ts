@@ -69,6 +69,28 @@ app.get('/v2/:name{.*}/blobs/:digest', async ({req, env}) => {
   )
 })
 
+app.post('/v2/:name{.*}/manifests/:reference/_import', async ({req, env}) => {
+  const name = req.param('name')
+  const reference = req.param('reference')
+  const tag = parseTag(reference)
+  if (!tag) return json({errors: [{code: 'MANIFEST_INVALID'}]}, {status: 400})
+
+  const res = await fetchFromRegistry(env, `https://registry/v2/${name}/manifests/${tag}`)
+  if (!res.ok) return res
+
+  try {
+    const digest = parseDigest(res.headers.get('Docker-Content-Digest') ?? '')
+    if (!digest) return json({errors: [{code: 'MANIFEST_INVALID'}]}, {status: 400})
+    await importAll(env, name, digest)
+    await env.storage.put(`${name}/tags/${tag}`, digest.digest)
+  } catch (err: any) {
+    console.log(err)
+    return json({errors: [{code: 'INTERNAL_ERROR', message: err.message}]}, {status: 500})
+  }
+
+  return res
+})
+
 app.notFound(({json}) => json({errors: [{code: 'NOT_FOUND', message: 'not found'}]}, 404))
 
 app.onError((err, {json}) => {
@@ -155,6 +177,57 @@ async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
   return new Response(obj.body, res)
 }
 
+async function importAll(env: Env['Bindings'], name: string, digest: Digest) {
+  const res = await importManifest(env, name, digest)
+  if (!res.ok) throw new Error(`failed to fetch manifest: ${res.status} ${res.statusText}`)
+
+  const content: Manifest = await res.json()
+  if (!content.mediaType) throw new Error('missing mediaType')
+
+  console.log(`importing ${name}@${digest.digest} (${content.mediaType})`)
+
+  switch (content.mediaType) {
+    case 'application/vnd.docker.distribution.manifest.list.v2+json':
+    case 'application/vnd.oci.image.index.v1+json': {
+      for (const descriptor of content.manifests) {
+        const digest = parseDigest(descriptor.digest)
+        if (!digest) throw new Error(`invalid manifest digest: ${descriptor.digest}`)
+        await importAll(env, name, digest)
+      }
+
+      return
+    }
+
+    case 'application/vnd.docker.distribution.manifest.v2+json':
+    case 'application/vnd.oci.image.manifest.v1+json': {
+      const digest = parseDigest(content.config.digest)
+      if (!digest) throw new Error(`invalid config digest: ${content.config.digest}`)
+      if (await env.storage.head(`${name}/blobs/${digest.digest}`)) {
+        console.log(`already imported ${name}@${digest.digest} (${content.config.mediaType})`)
+      } else {
+        console.log(`importing ${name}@${digest.digest} (${content.config.mediaType})`)
+        await importBlob(env, name, digest)
+      }
+
+      for (const layer of content.layers) {
+        const digest = parseDigest(layer.digest)
+        if (!digest) throw new Error(`invalid layer digest: ${layer.digest}`)
+        if (await env.storage.head(`${name}/blobs/${digest.digest}`)) {
+          console.log(`already imported ${name}@${digest.digest} (${layer.mediaType})`)
+        } else {
+          console.log(`importing ${name}@${digest.digest} (${layer.mediaType})`)
+          await importBlob(env, name, digest)
+        }
+      }
+
+      return
+    }
+
+    default:
+      throw new Error(`unknown content: ${JSON.stringify(content)}`)
+  }
+}
+
 async function resolveTagToDigest(env: Env['Bindings'], name: string, tag: string) {
   const obj = await env.storage.get(`${name}/tags/${tag}`)
   if (obj) return parseDigest(await obj.text())
@@ -175,7 +248,7 @@ async function fetchFromRegistry(env: Env['Bindings'], url: string, init: Reques
   const registryURL = new URL(url)
   registryURL.protocol = upstreamURL.protocol
   registryURL.hostname = upstreamURL.hostname
-  registryURL.pathname = registryURL.pathname.replace(/^\/v2\//, `/v2/${upstreamURL.pathname}`)
+  registryURL.pathname = registryURL.pathname.replace(/^\/v2\//, `/v2/${upstreamURL.pathname}/`)
 
   const headers = new Headers(init.headers)
   headers.set('accept', '*/*')
@@ -243,4 +316,29 @@ function parseDigest(candidate: string): Digest | null {
   if (algorithm !== 'sha256' && algorithm !== 'sha384' && algorithm !== 'sha512') return null
   if (!hash) return null
   return {algorithm, hash, digest: result.data}
+}
+
+// Manifest Types *************************************************************
+
+type Manifest = ImageIndex | ImageManifest
+
+interface Descriptor {
+  mediaType:
+    | 'application/vnd.docker.distribution.manifest.list.v2+json'
+    | 'application/vnd.oci.image.index.v1+json'
+    | 'application/vnd.docker.distribution.manifest.v2+json'
+    | 'application/vnd.oci.image.manifest.v1+json'
+    | string
+  digest: string
+}
+
+interface ImageIndex {
+  mediaType: 'application/vnd.docker.distribution.manifest.list.v2+json' | 'application/vnd.oci.image.index.v1+json'
+  manifests: Descriptor[]
+}
+
+interface ImageManifest {
+  mediaType: 'application/vnd.docker.distribution.manifest.v2+json' | 'application/vnd.oci.image.manifest.v1+json'
+  config: Descriptor
+  layers: Descriptor[]
 }
