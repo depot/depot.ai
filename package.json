@@ -9,7 +9,8 @@
     "fmt:check": "prettier --check .",
     "logs": "wrangler tail",
     "top-models": "tsx models/top.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "update-models": "tsx models/update.ts"
   },
   "dependencies": {
     "@types/node": "^20.4.1",
