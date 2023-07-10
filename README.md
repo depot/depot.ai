@@ -67,7 +67,7 @@ The models that `depot.ai` serves are defined in `models/models.yaml` — you ca
 ```yaml
 - name: username/model
   sha: 1234567890abcdef1234567890abcdef12345678
-  tag: latest
+  tagAs: latest
 ```
 
 ## License
