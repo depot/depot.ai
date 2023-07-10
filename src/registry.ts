@@ -164,15 +164,47 @@ async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
   const res = await fetchFromRegistry(env, `https://registry/v2/${name}/blobs/${digest.digest}`)
   if (!res.ok || !res.body) return res
 
-  await env.storage.put(`${name}/blobs/${digest.digest}`, res.body, {
+  const key = `${name}/blobs/${digest.digest}`
+  const options: R2PutOptions = {
     sha256: digest.hash,
     httpMetadata: {
       contentEncoding: res.headers.get('content-encoding') ?? undefined,
       contentType: res.headers.get('content-type') ?? undefined,
     },
-  })
+  }
 
-  const obj = await env.storage.get(`${name}/blobs/${digest.digest}`)
+  const contentLength = Number(res.headers.get('content-length') ?? 0)
+  const partSize = 1024 * 1024 * 250 // 250MB
+
+  if (contentLength > partSize) {
+    console.log(`importing blob ${digest.digest} in ${Math.ceil(contentLength / partSize)} parts`)
+    const upload = await env.storage.createMultipartUpload(key, options)
+    try {
+      const parts: R2UploadedPart[] = []
+      for (let idx = 0; idx < Math.ceil(contentLength / partSize); idx++) {
+        const range = `bytes=${idx * partSize}-${(idx + 1) * partSize - 1}`
+        const res = await fetchFromRegistry(env, `https://registry/v2/${name}/blobs/${digest.digest}`, {
+          headers: {Range: range},
+        })
+        if (!res.ok || !res.body) {
+          throw new Error(`failed to fetch blob for part ${idx}: ${res.status} ${res.statusText}`)
+        }
+
+        console.log(`importing blob ${digest.digest} part ${idx + 1}`)
+        parts.push(await upload.uploadPart(idx + 1, res.body))
+        console.log(`imported blob ${digest.digest} part ${idx + 1}`)
+      }
+      await upload.complete(parts)
+    } catch (err) {
+      await upload.abort()
+      throw err
+    }
+  } else {
+    console.log(`importing blob ${digest.digest}`)
+    await env.storage.put(key, res.body, options)
+  }
+
+  const obj = await env.storage.get(key)
   if (!obj) return new Response(null, {status: 404})
   return new Response(obj.body, res)
 }
@@ -213,9 +245,9 @@ async function importAll(env: Env['Bindings'], name: string, digest: Digest) {
         const digest = parseDigest(layer.digest)
         if (!digest) throw new Error(`invalid layer digest: ${layer.digest}`)
         if (await env.storage.head(`${name}/blobs/${digest.digest}`)) {
-          console.log(`already imported ${name}@${digest.digest} (${layer.mediaType})`)
+          console.log(`already imported ${name}@${digest.digest} (${layer.mediaType}, ${layer.size} bytes)`)
         } else {
-          console.log(`importing ${name}@${digest.digest} (${layer.mediaType})`)
+          console.log(`importing ${name}@${digest.digest} (${layer.mediaType}, ${layer.size} bytes)`)
           await importBlob(env, name, digest)
         }
       }
@@ -330,6 +362,7 @@ interface Descriptor {
     | 'application/vnd.oci.image.manifest.v1+json'
     | string
   digest: string
+  size: number
 }
 
 interface ImageIndex {
