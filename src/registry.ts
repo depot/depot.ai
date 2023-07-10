@@ -177,8 +177,10 @@ async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
   const partSize = 1024 * 1024 * 250 // 250MB
 
   if (contentLength > partSize) {
-    console.log(`importing blob ${digest.digest} in ${Math.ceil(contentLength / partSize)} parts`)
     const upload = await env.storage.createMultipartUpload(key, options)
+    console.log(
+      `importing blob ${digest.digest} in ${Math.ceil(contentLength / partSize)} parts (ID ${upload.uploadId})`,
+    )
     try {
       const parts: R2UploadedPart[] = []
       for (let idx = 0; idx < Math.ceil(contentLength / partSize); idx++) {
