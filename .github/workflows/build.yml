@@ -26,6 +26,9 @@ jobs:
           node-version: 18.x
           cache: pnpm
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Install depot
         uses: depot/setup-action@v1
         with:
