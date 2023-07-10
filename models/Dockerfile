@@ -19,8 +19,8 @@ RUN apt-get update \
 RUN git clone https://huggingface.co/${MODEL} /model && \
   cd /model && \
   git checkout ${SHA} && \
-  rm -rf /model/.git && \
-  find $( ls /model | grep -E -v "^(dev|mnt|proc|sys)$" ) -newermt "@${SOURCE_DATE_EPOCH}" -writable -xdev | xargs touch --date="@${SOURCE_DATE_EPOCH}" --no-dereference
+  rm -rf .git .gitattributes && \
+  find . -newermt "@${SOURCE_DATE_EPOCH}" -writable -xdev | xargs touch --date="@${SOURCE_DATE_EPOCH}" --no-dereference
 
 FROM scratch as model
 
