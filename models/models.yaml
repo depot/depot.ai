@@ -170,9 +170,6 @@ models:
   - name: t5-small
     sha: df1b051c49625cf57a3d0d8d3863ed4d13564fe4
     tagAs: latest
-  - name: pyannote/segmentation
-    sha: 7d5cf7bca4dcac7f943eb834bec0906a90da8c97
-    tagAs: latest
   - name: cambridgeltl/sapbert-from-pubmedbert-fulltext
     sha: 090663c3ae57bf35ffe4d0d468a2a88d03051a4d
     tagAs: latest
