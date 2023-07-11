@@ -1,5 +1,6 @@
 import type {HonoRequest} from 'hono'
 import {Hono} from 'hono'
+import PQueue from 'p-queue'
 import {z} from 'zod'
 
 // Types **********************************************************************
@@ -182,26 +183,23 @@ async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
     console.log(`importing blob ${digest.digest} in ${numberOfParts} parts (ID ${upload.uploadId})`)
     try {
       const parts: R2UploadedPart[] = new Array(numberOfParts)
-      const promises: Promise<void>[] = new Array(numberOfParts)
-      for (let idx = 0; idx < numberOfParts; idx++) {
-        promises.push(
-          (async (idx: number) => {
-            const range = `bytes=${idx * partSize}-${Math.min(contentLength - 1, (idx + 1) * partSize - 1)}`
-            const res = await fetchFromRegistry(env, `https://registry/v2/${name}/blobs/${digest.digest}`, {
-              headers: {Range: range},
-            })
-            if (!res.ok || !res.body) {
-              throw new Error(`failed to fetch blob for part ${idx}: ${res.status} ${res.statusText}`)
-            }
-
-            console.log(`importing blob ${digest.digest} part ${idx + 1}`)
-            parts[idx] = await upload.uploadPart(idx + 1, res.body)
-            console.log(`imported blob ${digest.digest} part ${idx + 1} ${res.headers.get('content-length')}`)
-          })(idx),
-        )
+      const queue = new PQueue({concurrency: 4})
+      for (let i = 0; i < numberOfParts; i++) {
+        const idx = i
+        await queue.add(async () => {
+          const range = `bytes=${idx * partSize}-${Math.min(contentLength - 1, (idx + 1) * partSize - 1)}`
+          console.log(`importing blob ${digest.digest} part ${idx + 1} (${range})`)
+          const res = await fetchFromRegistry(env, `https://registry/v2/${name}/blobs/${digest.digest}`, {
+            headers: {Range: range},
+          })
+          if (!res.ok || !res.body) {
+            throw new Error(`failed to fetch blob for part ${idx}: ${res.status} ${res.statusText}`)
+          }
+          parts[idx] = await upload.uploadPart(idx + 1, res.body)
+          console.log(`imported blob ${digest.digest} part ${idx + 1} ${res.headers.get('content-length')}`)
+        })
       }
-      await Promise.all(promises)
-      console.log(`finishing import of blob ${digest.digest}`)
+      await queue.onEmpty()
       await upload.complete(parts)
     } catch (err) {
       await upload.abort()
