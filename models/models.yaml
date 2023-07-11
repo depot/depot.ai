@@ -230,9 +230,6 @@ models:
   - name: google/fnet-base
     sha: d764d799e9bb72d0429a64d1512416a47e2246b3
     tagAs: latest
-  - name: pyannote/speaker-diarization
-    sha: 2c6a571d14c3794623b098a065ff95fa22da7f25
-    tagAs: latest
   - name: hustvl/yolos-tiny
     sha: 1a00cc14a139ff40bac9aa00c745915cb7b5b751
     tagAs: latest
