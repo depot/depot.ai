@@ -89,7 +89,7 @@ app.post('/v2/:name{.*}/manifests/:reference/_import', async ({req, env}) => {
     return json({errors: [{code: 'INTERNAL_ERROR', message: err.message}]}, {status: 500})
   }
 
-  return res
+  return json({ok: true})
 })
 
 app.notFound(({json}) => json({errors: [{code: 'NOT_FOUND', message: 'not found'}]}, 404))
