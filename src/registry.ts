@@ -175,7 +175,7 @@ async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
   }
 
   const contentLength = Number(res.headers.get('content-length') ?? 0)
-  const partSize = 1024 * 1024 * 250 // 250MB
+  const partSize = 1024 * 1024 * 500 // 500MB
   const numberOfParts = Math.ceil(contentLength / partSize)
 
   if (contentLength > partSize) {
