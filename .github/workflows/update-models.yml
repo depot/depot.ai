@@ -1,0 +1,36 @@
+name: Update Models
+on:
+  schedule:
+    - cron: '0 10 * * 1'
+jobs:
+  update-models:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.x.x
+
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check for model updates
+        run: pnpm update-models
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.BOT_GITHUB_SECRET }}
+          title: Update models from huggingface
+          commit-message: Update models
+          branch: model-updates
+          delete-branch: true
