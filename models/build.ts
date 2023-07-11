@@ -42,7 +42,10 @@ async function main() {
     }
 
     console.log(`Importing depot.ai/${model.name}:${model.tagAs}...`)
-    await $({stdio: 'inherit'})`curl -X POST https://depot.ai/v2/${model.name}/manifests/${model.tagAs}/_import`
+    await $({
+      stdio: 'inherit',
+    })`curl --silent -X POST https://depot.ai/v2/${model.name}/manifests/${model.tagAs}/_import`
+    console.log()
   }
   console.log('Done!')
 }
