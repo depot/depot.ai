@@ -11,23 +11,23 @@ models:
   - name: openai/clip-vit-large-patch14
     sha: 8d052a0f05efbaefbc9e8786ba291cfdf93e5bff
     tagAs: latest
-  - name: sociocom/medner-cr-ja
-    sha: 4c64fb004a42e1282868fbd4719839ac39d5652c
+  - name: bert-large-uncased
+    sha: 80792f8e8216b29f3c846b653a0ff0a37c210431
     tagAs: latest
   - name: gpt2
     sha: 11c5a3d5811f50298f278a704980280950aedb10
     tagAs: latest
-  - name: bert-large-uncased
-    sha: 80792f8e8216b29f3c846b653a0ff0a37c210431
+  - name: sociocom/medner-cr-ja
+    sha: 4c64fb004a42e1282868fbd4719839ac39d5652c
     tagAs: latest
   - name: xlm-roberta-base
     sha: 77de1f7a7e5e737aead1cd880979d4f1b3af6668
     tagAs: latest
-  - name: laion/clip-vit-b-16-laion2b-s34b-b88k
-    sha: 7288da5a0d6f0b51c4a2b27c624837a9236d0112
-    tagAs: latest
   - name: roberta-base
     sha: bc2764f8af2e92b6eb5679868df33e224075ca68
+    tagAs: latest
+  - name: laion/clip-vit-b-16-laion2b-s34b-b88k
+    sha: 7288da5a0d6f0b51c4a2b27c624837a9236d0112
     tagAs: latest
   - name: distilbert-base-uncased
     sha: 1c4513b2eedbda136f57676a34eea67aba266e5c
@@ -35,32 +35,32 @@ models:
   - name: distilbert-base-multilingual-cased
     sha: 9e90d6dd84b6a2e4d65e4d751baed6cd56578fd3
     tagAs: latest
+  - name: distilroberta-base
+    sha: d5411c3ee9e1793fd9ef58390b40a80a4c10df32
+    tagAs: latest
   - name: cidas/clipseg-rd64-refined
     sha: 583b388deb98a04feb3e1f816dcdb8f3062ee205
     tagAs: latest
   - name: microsoft/layoutlmv3-base
     sha: ba7716c277fb9b49bba6c3c4cad84123b689acf2
     tagAs: latest
-  - name: distilroberta-base
-    sha: d5411c3ee9e1793fd9ef58390b40a80a4c10df32
-    tagAs: latest
   - name: albert-base-v2
     sha: 1609e3e3df9ac066606df93cd0b12e7539ac68c4
-    tagAs: latest
-  - name: nlptown/bert-base-multilingual-uncased-sentiment
-    sha: e06857fdb0325a7798a8fc361b417dfeec3a3b98
     tagAs: latest
   - name: runwayml/stable-diffusion-v1-5
     sha: c9ab35ff5f2c362e9e22fbafe278077e196057f0
     tagAs: latest
+  - name: nlptown/bert-base-multilingual-uncased-sentiment
+    sha: e06857fdb0325a7798a8fc361b417dfeec3a3b98
+    tagAs: latest
   - name: bert-base-cased
     sha: 5532cc56f74641d4bb33641f5c76a55d11f846e0
     tagAs: latest
-  - name: microsoft/deberta-base
-    sha: 0d1b43ccf21b5acd9f4e5f7b077fa698f05cf195
-    tagAs: latest
   - name: samlowe/roberta-base-go_emotions
     sha: 997526b1acaa5fea2d3f1a01e4ec5f48c081c8f3
+    tagAs: latest
+  - name: microsoft/deberta-base
+    sha: 0d1b43ccf21b5acd9f4e5f7b077fa698f05cf195
     tagAs: latest
   - name: aitslab/biobert_huner_chemical_v1
     sha: 2b4ff3becd5a60c0dae1527bc61feb22c20de860
@@ -68,32 +68,35 @@ models:
   - name: cardiffnlp/twitter-roberta-base-irony
     sha: 2b96430ffcab98bbffda582426981257fdbd0604
     tagAs: latest
+  - name: sentence-transformers/paraphrase-multilingual-minilm-l12-v2
+    sha: b8ef00830037f9868450f778081ea683e900fe39
+    tagAs: latest
   - name: salesken/query_wellformedness_score
     sha: 433e0f21cf2f77bd95360bcf556e5ab4de15284d
     tagAs: latest
   - name: marieke93/minilm-evidence-types
     sha: afdd48fd4eb5d666bdd2d9d34e027bb1405d0b46
     tagAs: latest
-  - name: microsoft/resnet-50
-    sha: 4067a2728b9c93fbd67b9d5a30b03495ac74a46e
-    tagAs: latest
   - name: alimazhar-110/website_classification
     sha: fe00d751072043616700d68bfdaf80b4ab487f62
     tagAs: latest
-  - name: openai/clip-vit-base-patch32
-    sha: e6a30b603a447e251fdaca1c3056b2a16cdfebeb
+  - name: microsoft/resnet-50
+    sha: 4067a2728b9c93fbd67b9d5a30b03495ac74a46e
     tagAs: latest
   - name: facebook/bart-large-mnli
     sha: 9fc9c4e1808b5613968646fa771fc43fb03995f2
     tagAs: latest
-  - name: prajjwal1/bert-tiny
-    sha: 6f75de8b60a9f8a2fdf7b69cbd86d9e64bcb3837
-    tagAs: latest
-  - name: sentence-transformers/paraphrase-multilingual-minilm-l12-v2
-    sha: b8ef00830037f9868450f778081ea683e900fe39
+  - name: openai/clip-vit-base-patch32
+    sha: e6a30b603a447e251fdaca1c3056b2a16cdfebeb
     tagAs: latest
   - name: sentence-transformers/all-minilm-l6-v2
     sha: 7dbbc90392e2f80f3d3c277d6e90027e55de9125
+    tagAs: latest
+  - name: prajjwal1/bert-tiny
+    sha: 6f75de8b60a9f8a2fdf7b69cbd86d9e64bcb3837
+    tagAs: latest
+  - name: moritzlaurer/deberta-v3-base-mnli-fever-anli
+    sha: eb8b17b1983bca679126ea69b12b5d28c5fe9b9a
     tagAs: latest
   - name: microsoft/layoutlm-base-uncased
     sha: 535915d2599febec3e1afb5dd5a7b3563f31eed3
@@ -103,9 +106,6 @@ models:
     tagAs: latest
   - name: google/vit-base-patch16-224
     sha: 2ddc9d4e473d7ba52128f0df4723e478fa14fb80
-    tagAs: latest
-  - name: moritzlaurer/deberta-v3-base-mnli-fever-anli
-    sha: eb8b17b1983bca679126ea69b12b5d28c5fe9b9a
     tagAs: latest
   - name: distilbert-base-uncased-finetuned-sst-2-english
     sha: 3d65bad49c7ba6f71920504507a8927f4b9db6c0
@@ -122,17 +122,17 @@ models:
   - name: bert-base-multilingual-cased
     sha: fdfce55e83dbed325647a63e7e1f5de19f0382ba
     tagAs: latest
-  - name: roberta-large
-    sha: 716877d372b884cad6d419d828bac6c85b3b18d9
-    tagAs: latest
   - name: aitslab/biobert_huner_gene_v1
     sha: d839efbe0108ce83428816e15919d6d0d43a521a
     tagAs: latest
-  - name: sentence-transformers/all-mpnet-base-v2
-    sha: bd44305fd6a1b43c16baf96765e2ecb20bca8e1d
+  - name: roberta-large
+    sha: 716877d372b884cad6d419d828bac6c85b3b18d9
     tagAs: latest
   - name: allenai/scibert_scivocab_uncased
     sha: 24f92d32b1bfb0bcaf9ab193ff3ad01e87732fc1
+    tagAs: latest
+  - name: sentence-transformers/all-mpnet-base-v2
+    sha: bd44305fd6a1b43c16baf96765e2ecb20bca8e1d
     tagAs: latest
   - name: t5-base
     sha: fe6d9bf207cd3337512ca838a8b453f87a9178ef
@@ -152,29 +152,29 @@ models:
   - name: camembert-base
     sha: 9275231ccf73a00b1b170ad0e8a86de8d3b63074
     tagAs: latest
-  - name: seethal/sentiment_analysis_generic_dataset
-    sha: 26edc13094473094204e42245018bee141699c8c
-    tagAs: latest
   - name: bigscience/bloom-560m
     sha: 4f42c91d806a19ae1a46af6c3fb5f4990d884cd6
     tagAs: latest
-  - name: timm/vit_large_patch14_clip_224.openai_ft_in12k_in1k
-    sha: d60a3897110a7ebf07eeaa7f1d2962092eb8412d
+  - name: seethal/sentiment_analysis_generic_dataset
+    sha: 26edc13094473094204e42245018bee141699c8c
     tagAs: latest
   - name: facebook/encodec_24khz
     sha: e5e900dde49c9faa32f4e3f6b07ea1894263b78a
     tagAs: latest
-  - name: microsoft/biomednlp-pubmedbert-base-uncased-abstract-fulltext
-    sha: eaa409b6b7c9380a5f2ba7a59aa97712ff30f386
-    tagAs: latest
   - name: t5-small
     sha: df1b051c49625cf57a3d0d8d3863ed4d13564fe4
     tagAs: latest
-  - name: cambridgeltl/sapbert-from-pubmedbert-fulltext
-    sha: 090663c3ae57bf35ffe4d0d468a2a88d03051a4d
+  - name: microsoft/biomednlp-pubmedbert-base-uncased-abstract-fulltext
+    sha: eaa409b6b7c9380a5f2ba7a59aa97712ff30f386
+    tagAs: latest
+  - name: timm/vit_large_patch14_clip_224.openai_ft_in12k_in1k
+    sha: d60a3897110a7ebf07eeaa7f1d2962092eb8412d
     tagAs: latest
   - name: laion/clip-vit-h-14-laion2b-s32b-b79k
     sha: 94a64189c3535c1cb44acfcccd7b0908c1c8eb23
+    tagAs: latest
+  - name: cambridgeltl/sapbert-from-pubmedbert-fulltext
+    sha: 090663c3ae57bf35ffe4d0d468a2a88d03051a4d
     tagAs: latest
   - name: facebook/bart-large
     sha: cb48c1365bd826bd521f650dc2e0940aee54720c
@@ -182,38 +182,38 @@ models:
   - name: deepset/tinyroberta-squad2
     sha: 75c968b8219e055ce1a89533057b142bae65450f
     tagAs: latest
-  - name: rinna/japanese-hubert-base
-    sha: 3c0d367b1841bce9cbbb0fb28c53ae1ca4f42ef3
-    tagAs: latest
   - name: dslim/bert-large-ner
     sha: a371aceaa84bd99547818ba82b85b48608aade78
+    tagAs: latest
+  - name: rinna/japanese-hubert-base
+    sha: 3c0d367b1841bce9cbbb0fb28c53ae1ca4f42ef3
     tagAs: latest
   - name: distilgpt2
     sha: 38cc92ec43315abd5136313225e95acc5986876c
     tagAs: latest
-  - name: nlpconnect/vit-gpt2-image-captioning
-    sha: dc68f91c06a1ba6f15268e5b9c13ae7a7c514084
-    tagAs: latest
-  - name: cardiffnlp/twitter-roberta-base-sentiment-latest
-    sha: 4ba3d4463bd152c9e4abd892b50844f30c646708
+  - name: timm/resnet50.a1_in1k
+    sha: 93271f4677dbf7b4d7f7e7d9d7811bd66c327e56
     tagAs: latest
   - name: dslim/bert-base-ner
     sha: 7a1d333eb0aadffc59fd1e4f56bfedf56b5028e4
     tagAs: latest
-  - name: yiyanghkust/finbert-tone
-    sha: 4921590d3c0c3832c0efea24c8381ce0bda7844b
+  - name: nlpconnect/vit-gpt2-image-captioning
+    sha: dc68f91c06a1ba6f15268e5b9c13ae7a7c514084
     tagAs: latest
   - name: nateraw/vit-age-classifier
     sha: f5629497debbd1a543fa49e0a86cadd145d4947d
     tagAs: latest
-  - name: timm/resnet50.a1_in1k
-    sha: 93271f4677dbf7b4d7f7e7d9d7811bd66c327e56
-    tagAs: latest
-  - name: prosusai/finbert
-    sha: 4556d13015211d73dccd3fdd39d39232506f3e43
+  - name: cardiffnlp/twitter-roberta-base-sentiment-latest
+    sha: 4ba3d4463bd152c9e4abd892b50844f30c646708
     tagAs: latest
   - name: thudm/chatglm2-6b
     sha: 0ecfe0b857efd00836a4851b3dd2ed04bd4b197f
+    tagAs: latest
+  - name: yiyanghkust/finbert-tone
+    sha: 4921590d3c0c3832c0efea24c8381ce0bda7844b
+    tagAs: latest
+  - name: prosusai/finbert
+    sha: 4556d13015211d73dccd3fdd39d39232506f3e43
     tagAs: latest
   - name: facebook/bart-large-cnn
     sha: 3d224934c6541b2b9147e023c2f6f6fe49bd27e1
@@ -221,59 +221,65 @@ models:
   - name: j-hartmann/emotion-english-distilroberta-base
     sha: 0e1cd914e3d46199ed785853e12b57304e04178b
     tagAs: latest
-  - name: google/flan-t5-large
-    sha: 2d6503cbe79448e511312ba3377a9cde16a2135a
-    tagAs: latest
   - name: yitutech/conv-bert-base
     sha: 5cb451936b5c4a96562d8b146de85f64f9cf2c22
     tagAs: latest
   - name: google/fnet-base
     sha: d764d799e9bb72d0429a64d1512416a47e2246b3
     tagAs: latest
-  - name: hustvl/yolos-tiny
-    sha: 1a00cc14a139ff40bac9aa00c745915cb7b5b751
-    tagAs: latest
-  - name: google/bert_uncased_l-2_h-128_a-2
-    sha: 1ae49ff827beda5996998802695c4cac8e9932c6
-    tagAs: latest
-  - name: stabilityai/sd-vae-ft-mse
-    sha: 31f26fdeee1355a5c34592e401dd41e45d25a493
-    tagAs: latest
-  - name: dslim/bert-base-ner-uncased
-    sha: 301540b48433e31000058882c971ddd7bc726547
-    tagAs: latest
-  - name: cardiffnlp/twitter-roberta-base-sentiment
-    sha: daefdd1f6ae931839bce4d0f3db0a1a4265cd50f
+  - name: google/flan-t5-large
+    sha: 2d6503cbe79448e511312ba3377a9cde16a2135a
     tagAs: latest
   - name: cardiffnlp/twitter-xlm-roberta-base-sentiment
     sha: 7fc063fd2397b49206e7200fdce50c1ad8e52ece
     tagAs: latest
-  - name: jean-baptiste/camembert-ner
-    sha: ef35fe7767c1dad71f5c853838cdd80d0b3441ed
+  - name: stabilityai/sd-vae-ft-mse
+    sha: 31f26fdeee1355a5c34592e401dd41e45d25a493
+    tagAs: latest
+  - name: google/bert_uncased_l-2_h-128_a-2
+    sha: 1ae49ff827beda5996998802695c4cac8e9932c6
+    tagAs: latest
+  - name: cardiffnlp/twitter-roberta-base-sentiment
+    sha: daefdd1f6ae931839bce4d0f3db0a1a4265cd50f
+    tagAs: latest
+  - name: dslim/bert-base-ner-uncased
+    sha: 301540b48433e31000058882c971ddd7bc726547
     tagAs: latest
   - name: ltp/small
     sha: 0b3e08649fe02688112fa21e69e3eec38101fcaa
     tagAs: latest
-  - name: prajjwal1/bert-small
-    sha: 0ec5f86f27c1a77d704439db5e01c307ea11b9d4
+  - name: jean-baptiste/camembert-ner
+    sha: ef35fe7767c1dad71f5c853838cdd80d0b3441ed
     tagAs: latest
-  - name: compvis/stable-diffusion-safety-checker
-    sha: cb41f3a270d63d454d385fc2e4f571c487c253c5
-    tagAs: latest
-  - name: hf-internal-testing/tiny-random-gpt2
-    sha: 937b4d23b6648f5a1a0d1247b939b26981798903
+  - name: hustvl/yolos-tiny
+    sha: 1a00cc14a139ff40bac9aa00c745915cb7b5b751
     tagAs: latest
   - name: google/flan-t5-base
     sha: c782cba52f8ea6a704240578055cf1c3fc2f2ca9
     tagAs: latest
+  - name: hf-internal-testing/tiny-random-gpt2
+    sha: 937b4d23b6648f5a1a0d1247b939b26981798903
+    tagAs: latest
+  - name: compvis/stable-diffusion-safety-checker
+    sha: cb41f3a270d63d454d385fc2e4f571c487c253c5
+    tagAs: latest
+  - name: prajjwal1/bert-small
+    sha: 0ec5f86f27c1a77d704439db5e01c307ea11b9d4
+    tagAs: latest
   - name: shibing624/text2vec-base-chinese
     sha: 26420fdf61ddfd92fafbaf3bc21a7c06b1812248
+    tagAs: latest
+  - name: intfloat/e5-small-v2
+    sha: 7f5bd82b76a6c4c7b0f71629627cbd9a3825eb10
     tagAs: latest
   - name: facebook/wav2vec2-base-960h
     sha: 22aad52d435eb6dbaf354bdad9b0da84ce7d6156
     tagAs: latest
-  - name: intfloat/e5-small-v2
-    sha: 7f5bd82b76a6c4c7b0f71629627cbd9a3825eb10
+  - name: thebloke/vicuna-7b-1.1-hf
+    sha: dae87acbda0bc0c504118f4addaf388e6eca8bd1
+    tagAs: latest
+  - name: facebook/bart-base
+    sha: aadd2ab0ae0c8268c7c9693540e9904811f36177
     tagAs: latest
   - name: alexandrainst/scandi-nli-large
     sha: 67845a701b1c072e66a07bab4036b522f6a047c6
@@ -281,15 +287,15 @@ models:
   - name: cl-tohoku/bert-base-japanese-whole-word-masking
     sha: ab68bf4a4d55e7772b1fbea6441bdab72aaf949c
     tagAs: latest
+  - name: google/flan-t5-xxl
+    sha: ad196ce8c46191d6a52592960835ff96d30152b5
+    tagAs: latest
   - name: openai/clip-vit-base-patch16
     sha: 57c216476eefef5ab752ec549e440a49ae4ae5f3
     tagAs: latest
   - name: laion/clip-vit-b-32-laion2b-s34b-b79k
     sha: 24a1247a8a52ca09638b6420cd58550db755b324
     tagAs: latest
-  - name: google/flan-t5-xxl
-    sha: ad196ce8c46191d6a52592960835ff96d30152b5
-    tagAs: latest
-  - name: facebook/vit-mae-base
-    sha: f4bf8a536816f4f7d5c8b7fbd4621396c195001f
+  - name: stabilityai/stable-diffusion-2-1
+    sha: 5cae40e6a2745ae2b01ad92ae5043f95f23644d6
     tagAs: latest
