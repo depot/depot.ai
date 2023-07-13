@@ -207,7 +207,7 @@ models:
     sha: 4ba3d4463bd152c9e4abd892b50844f30c646708
     tagAs: latest
   - name: thudm/chatglm2-6b
-    sha: 0ecfe0b857efd00836a4851b3dd2ed04bd4b197f
+    sha: 162b620e3078b03eefff94eb5f762d4093425fb5
     tagAs: latest
   - name: yiyanghkust/finbert-tone
     sha: 4921590d3c0c3832c0efea24c8381ce0bda7844b
