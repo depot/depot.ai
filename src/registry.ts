@@ -382,6 +382,7 @@ function getPostHog(env: Env['Bindings']): PostHog {
       fetch: (info: RequestInfo, init?: RequestInit) => fetch(info, init),
       flushAt: 1,
       flushInterval: 0,
+      disableGeoip: false,
     })
   }
   return _posthog
