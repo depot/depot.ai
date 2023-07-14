@@ -88,6 +88,7 @@ app.get('/v2/:name{.*}/blobs/:digest', async ({req, env}) => {
 })
 
 app.post('/v2/:name{.*}/manifests/:reference/_import', async ({req, env}) => {
+  const url = new URL(req.url)
   const name = req.param('name')
   const reference = req.param('reference')
   const tag = parseTag(reference)
@@ -96,17 +97,15 @@ app.post('/v2/:name{.*}/manifests/:reference/_import', async ({req, env}) => {
   const res = await fetchFromRegistry(env, `https://registry/v2/${name}/manifests/${tag}`)
   if (!res.ok) return res
 
-  try {
-    const digest = parseDigest(res.headers.get('Docker-Content-Digest') ?? '')
-    if (!digest) return json({errors: [{code: 'MANIFEST_INVALID'}]}, {status: 400})
+  const digest = parseDigest(res.headers.get('Docker-Content-Digest') ?? '')
+  if (!digest) return json({errors: [{code: 'MANIFEST_INVALID'}]}, {status: 400})
+
+  if (url.searchParams.has('full') || !(await env.storage.head(`${name}/manifests/${digest.digest}`))) {
     await importAll(env, name, digest)
-    await env.storage.put(`${name}/tags/${tag}`, digest.digest)
-  } catch (err: any) {
-    console.log(err)
-    return json({errors: [{code: 'INTERNAL_ERROR', message: err.message}]}, {status: 500})
   }
 
-  return json({ok: true})
+  await env.storage.put(`${name}/tags/${tag}`, digest.digest)
+  return json({ok: true, name, digest: digest.digest})
 })
 
 app.notFound(({json}) => json({errors: [{code: 'NOT_FOUND', message: 'not found'}]}, 404))
