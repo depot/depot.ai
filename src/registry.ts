@@ -1,6 +1,7 @@
 import type {HonoRequest} from 'hono'
 import {Hono} from 'hono'
 import PQueue from 'p-queue'
+import {PostHog} from 'posthog-node'
 import {z} from 'zod'
 
 // Types **********************************************************************
@@ -10,6 +11,7 @@ interface Env {
     storage: R2Bucket
     REGISTRY_TOKEN: string
     UPSTREAM_REGISTRY: string
+    POSTHOG_API_KEY: string
   }
 }
 
@@ -31,7 +33,7 @@ app.use('*', async (c, next) => {
 app.get('/', ({text}) => text('🔮'))
 app.get('/v2/', ({text}) => text('🔮'))
 
-app.get('/v2/:name{.*}/manifests/:reference', async ({req, env}) => {
+app.get('/v2/:name{.*}/manifests/:reference', async ({req, env, executionCtx}) => {
   const name = req.param('name')
   const reference = req.param('reference')
 
@@ -44,6 +46,21 @@ app.get('/v2/:name{.*}/manifests/:reference', async ({req, env}) => {
     'Docker-Content-Digest': digest.digest,
     'Docker-Distribution-Api-Version': 'registry/2.0',
   })
+
+  if (tag && env.POSTHOG_API_KEY) {
+    executionCtx.waitUntil(
+      (async () => {
+        const ip = req.headers.get('cf-connecting-ip')
+        const posthog = getPostHog(env)
+        posthog.capture({
+          distinctId: ip ?? 'anonymous',
+          event: 'depot.ai: pull image',
+          properties: {reference: `${name}:${tag}`, name, tag, digest: digest.digest, $ip: ip, $geoip_disable: false},
+        })
+        await posthog.flushAsync()
+      })(),
+    )
+  }
 
   return pullThroughRegistry(
     req,
@@ -354,6 +371,20 @@ function parseDigest(candidate: string): Digest | null {
   if (algorithm !== 'sha256' && algorithm !== 'sha384' && algorithm !== 'sha512') return null
   if (!hash) return null
   return {algorithm, hash, digest: result.data}
+}
+
+// Analytics ******************************************************************
+
+let _posthog: PostHog | undefined
+function getPostHog(env: Env['Bindings']): PostHog {
+  if (!_posthog) {
+    _posthog = new PostHog(env.POSTHOG_API_KEY, {
+      fetch: (info: RequestInfo, init?: RequestInit) => fetch(info, init),
+      flushAt: 1,
+      flushInterval: 0,
+    })
+  }
+  return _posthog
 }
 
 // Manifest Types *************************************************************
