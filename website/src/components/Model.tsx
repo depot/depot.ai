@@ -1,4 +1,5 @@
-import {SVGProps, useEffect, useState} from 'react'
+import {cx} from 'class-variance-authority'
+import {SVGProps, useCallback, useEffect, useState} from 'react'
 import {useCopyToClipboard} from '../hooks/useCopyToClipboard'
 
 export interface ModelProps {
@@ -19,19 +20,26 @@ export function Model({name, sha, tagAs}: ModelProps) {
     return () => clearTimeout(timeout)
   }, [value])
 
+  const copyImage = useCallback(() => {
+    copy(`COPY --link --from=depot.ai/${name}:${tagAs} / .`)
+  }, [name, tagAs])
+
   return (
     <div className="bg-radix-mauve1 border border-radix-mauve6 px-4 py-4 rounded-lg gap-2 flex items-center leading-none justify-between">
-      <div
-        className="flex items-center cursor-pointer gap-3"
-        onClick={() => copy(`COPY --link --from=depot.ai/${name}:${tagAs} / .`)}
-      >
-        <CopyIcon className="text-radix-mauve10" />
-        <div className="tracking-tight text-lg">
+      <button type="button" className="flex items-center cursor-pointer gap-3 min-w-0" onClick={copyImage}>
+        <CopyIcon
+          className={cx(
+            'flex-shrink-0',
+            copied && 'text-radix-mauve12 animate-pulse-slow',
+            !copied && 'text-radix-mauve10',
+          )}
+        />
+        <div className="tracking-tight whitespace-nowrap md:text-lg overflow-x-scroll overflow-y-hidden">
           <span className="text-radix-mauve11">depot.ai/</span>
           {name}
           <span className="text-radix-mauve11">:{tagAs}</span>
         </div>
-      </div>
+      </button>
       {copied && (
         <span className="text-radix-mauve11">
           <span className="animate-pulse-slow text-radix-grass11 text-sm">copied</span>

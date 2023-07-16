@@ -44,7 +44,7 @@ export function ModelList({models}: ModelListProps) {
       <div className="relative">
         <input
           type="text"
-          className="bg-radix-mauve3 w-full border border-radix-mauve7 ring-radix-blue9 rounded-lg hover:border-radix-mauve8"
+          className="bg-radix-mauve3 w-full border border-radix-mauve7 ring-radix-blue9 rounded-lg hover:border-radix-mauve8 px-4"
           placeholder="Type to filter models by name..."
           value={filter}
           onChange={onChange}

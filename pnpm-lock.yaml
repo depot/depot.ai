@@ -8,9 +8,6 @@ dependencies:
   '@types/node':
     specifier: ^20.4.2
     version: 20.4.2
-  fuse.js:
-    specifier: ^6.6.2
-    version: 6.6.2
   hono:
     specifier: ^3.3.0
     version: 3.3.0
@@ -1392,11 +1389,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /fuse.js@6.6.2:
-    resolution: {integrity: sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==}
-    engines: {node: '>=10'}
-    dev: false
 
   /get-source@2.0.12:
     resolution: {integrity: sha512-X5+4+iD+HoSeEED+uwrQ07BOQr0kEDFMVqqpBuI+RaZBpBpHCuXxo70bjar6f0b0u/DQJsJ7ssurpP0V60Az+w==}

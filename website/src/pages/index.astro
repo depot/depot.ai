@@ -3,8 +3,9 @@ import * as example from '../examples/example.md'
 import * as yaml from 'js-yaml'
 import * as fsp from 'node:fs/promises'
 import * as path from 'node:path'
-import {Model} from '../components/Model'
+import type {Model} from '../components/Model'
 import {ModelList} from '../components/ModelList'
+import {GitHubIcon} from '../components/icons'
 
 export const prerender = true
 
@@ -23,7 +24,7 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>depot.ai</title>
     <style is:global>
@@ -36,9 +37,11 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
     </style>
   </head>
 
-  <body class="bg-radix-mauve-black text-radix-mauve12">
-    <div class="mx-auto my-16 max-w-3xl space-y-8 border border-radix-mauve6 rounded-xl p-8">
-      <div class="flex items-baseline justify-between gap-4 leading-none border-b border-radix-mauve6 pb-8">
+  <body class="bg-radix-mauve-black text-radix-mauve12 pb-8 md:py-8">
+    <div class="mx-auto max-w-3xl space-y-8 border border-radix-mauve6 rounded-xl p-6 md:p-8">
+      <div
+        class="flex flex-col items-center justify-between gap-4 leading-none border-b border-radix-mauve6 pb-8 md:items-baseline md:flex-row"
+      >
         <h1 class="text-6xl font-bold">
           depot.<span class="bg-gradient-to-br from-radix-crimson9 to-radix-blue9 text-transparent bg-clip-text"
             >ai</span
@@ -70,18 +73,60 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
         </a>
       </div>
 
-      <div class="text-lg text-radix-mauve12 border-b border-radix-mauve6 pb-8">
-        Embed machine learning models in your
-        <code class="text-radix-amber11 bg-radix-amber3 p-1 rounded -m-1">Dockerfile</code>.
+      <div class="text-lg text-radix-mauve12 border-b border-radix-mauve6 pb-8 text-center">
+        A Docker registry for embedding machine learning models in your
+        <code class="text-radix-amber11 text-sm bg-radix-amber3 p-1 rounded -m-1">Dockerfile</code>.
       </div>
 
-      <h2 class="text-2xl font-semibold">Usage</h2>
+      <div
+        class="text-radix-mauve12 text-center font-medium border-b border-radix-mauve6 pb-8 grid grid-cols-2 px-4 md:px-8 md:grid-cols-4 gap-4"
+      >
+        <a href="#usage" class="border border-radix-mauve7 bg-radix-mauve3 rounded p-2">Usage</a>
+        <a href="#models" class="border border-radix-mauve7 bg-radix-mauve3 rounded p-2">Model list</a>
+        <a href="https://depot.dev/blog/depot-ai" class="border border-radix-mauve7 bg-radix-mauve3 rounded p-2"
+          >About depot.ai</a
+        >
+        <a href="https://github.com/depot/depot.ai" class="border border-radix-mauve7 bg-radix-mauve3 rounded p-2"
+          >Source Code</a
+        >
+      </div>
+
+      <h2 id="usage" class="text-2xl font-semibold scroll-mt-8">Usage</h2>
+
+      <div class="text-radix-mauve11">
+        The registry serves model content from <a href="https://huggingface.co" class="text-radix-mauve12"
+          >Hugging Face</a
+        > as highly-optimized Docker images, which you can embed in your own container images with just a <code
+          class="text-radix-amber11 text-sm bg-radix-amber3 p-1 rounded">COPY</code
+        >.
+      </div>
 
       <div class="bg-radix-mauve1 -mx-8 p-8 text-sm border-y border-radix-mauve4">
         <example.Content />
       </div>
 
-      <div id="models" class="flex items-center justify-between">
+      <div class="text-radix-mauve11 border-b border-radix-mauve6 pb-8 space-y-3">
+        <p>
+          Compared to alternatives like <code class="text-radix-amber11 text-sm bg-radix-amber3 p-1 rounded"
+            >git lfs clone</code
+          >, depot.ai images build faster, are cached between builds, and only store the model layer once in your
+          registry, reducing storage and bandwidth.
+        </p>
+
+        <p>
+          Each model image includes an <a
+            href="https://github.com/containerd/stargz-snapshotter/blob/main/docs/estargz.md"
+            class="text-radix-mauve12">eStargz index</a
+          >, which allows Docker's BuildKit to download only the files copied from the model during the build. If you
+          build images with <a href="https://github.com/depot/depot.ai#how-it-works" class="text-radix-mauve12">Depot</a
+          >, this index is automatically used. Otherwise you will need to <a
+            href="https://github.com/containerd/stargz-snapshotter/blob/main/docs/integration.md#image-builders"
+            class="text-radix-mauve12">enable eStargz</a
+          > in your image builder.
+        </p>
+      </div>
+
+      <div id="models" class="flex items-center justify-between scroll-mt-8">
         <h2 class="text-2xl font-semibold">Models</h2>
 
         <div class="text-sm text-radix-mauve11 text-right">
@@ -93,6 +138,12 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
       <div>
         <ModelList models={models} client:idle />
       </div>
+    </div>
+
+    <div class="mx-auto mt-8 text-center">
+      <a href="https://github.com/depot/depot.ai" class="text-radix-mauve11 flex items-center justify-center gap-2">
+        <GitHubIcon className="inline-block w-4 h-4" /> <div>Source</div></a
+      >
     </div>
   </body>
 </html>

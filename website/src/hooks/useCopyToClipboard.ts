@@ -1,4 +1,5 @@
-import {useState} from 'react'
+import copyTextToClipboard from 'copy-text-to-clipboard'
+import {useCallback, useState} from 'react'
 
 type CopiedValue = string | null
 type CopyFn = (text: string) => Promise<boolean> // Return success
@@ -6,23 +7,17 @@ type CopyFn = (text: string) => Promise<boolean> // Return success
 export function useCopyToClipboard(): [CopiedValue, CopyFn] {
   const [copiedText, setCopiedText] = useState<CopiedValue>(null)
 
-  const copy: CopyFn = async (text) => {
-    if (!navigator?.clipboard) {
-      console.warn('Clipboard not supported')
-      return false
-    }
-
-    // Try to save to clipboard then save it in the state if worked
+  const copy: CopyFn = useCallback(async (text) => {
     try {
-      await navigator.clipboard.writeText(text)
-      setCopiedText(text)
-      return true
+      const success = copyTextToClipboard(text)
+      if (success) setCopiedText(text)
+      return success
     } catch (error) {
       console.warn('Copy failed', error)
       setCopiedText(null)
       return false
     }
-  }
+  }, [])
 
   return [copiedText, copy]
 }
