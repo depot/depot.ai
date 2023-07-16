@@ -4,6 +4,7 @@ import * as yaml from 'js-yaml'
 import * as fsp from 'node:fs/promises'
 import * as path from 'node:path'
 import {Model} from '../components/Model'
+import {ModelList} from '../components/ModelList'
 
 export const prerender = true
 
@@ -89,8 +90,8 @@ const {models} = yaml.load(await fsp.readFile(path.join(process.cwd(), '../model
         </div>
       </div>
 
-      <div class="flex flex-col gap-4 flex-1">
-        {models.map((model) => <Model name={model.name} sha={model.sha} tagAs={model.tagAs} client:idle />)}
+      <div>
+        <ModelList models={models} client:idle />
       </div>
     </div>
   </body>
