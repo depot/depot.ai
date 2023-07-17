@@ -25,7 +25,7 @@ export function Model({name, sha, tagAs}: ModelProps) {
   }, [name, tagAs])
 
   return (
-    <div className="bg-radix-mauve1 border border-radix-mauve6 px-4 py-4 rounded-lg gap-2 flex items-center leading-none justify-between">
+    <div className="bg-radix-mauve1 border border-radix-mauve6 px-4 rounded-lg gap-2 flex items-center leading-none justify-between">
       <button type="button" className="flex items-center cursor-pointer gap-3 min-w-0" onClick={copyImage}>
         <CopyIcon
           className={cx(
@@ -34,7 +34,7 @@ export function Model({name, sha, tagAs}: ModelProps) {
             !copied && 'text-radix-mauve10',
           )}
         />
-        <div className="tracking-tight whitespace-nowrap md:text-lg overflow-x-scroll overflow-y-hidden">
+        <div className="tracking-tight whitespace-nowrap md:text-lg py-4 overflow-x-scroll md:overflow-x-hidden overflow-y-hidden">
           <span className="text-radix-mauve11">depot.ai/</span>
           {name}
           <span className="text-radix-mauve11">:{tagAs}</span>
