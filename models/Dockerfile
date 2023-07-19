@@ -11,7 +11,7 @@ ARG SHA
 ARG SOURCE_DATE_EPOCH
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends git-lfs=3.3.0-1+b5 ca-certificates \
+  && apt-get install -y --no-install-recommends git-lfs=3.3.0-1+b5 ca-certificates openssh-client \
   && git lfs install \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
