@@ -17,7 +17,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 RUN --mount=type=ssh \
-  git clone https://huggingface.co/${MODEL} /model && \
+  git clone git@hf.co:${MODEL} /model && \
   cd /model && \
   git checkout ${SHA} && \
   rm -rf .git .gitattributes && \
