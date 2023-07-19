@@ -17,6 +17,8 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 RUN --mount=type=ssh \
+  mkdir -p ~/.ssh && \
+  ssh-keyscan hf.co >> ~/.ssh/known_hosts && \
   git clone git@hf.co:${MODEL} /model && \
   cd /model && \
   git checkout ${SHA} && \
