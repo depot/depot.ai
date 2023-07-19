@@ -41,6 +41,11 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.HUGGING_FACE_SSH_KEY }}
+
       - name: Set up gcloud CLI
         uses: google-github-actions/setup-gcloud@v1
 
