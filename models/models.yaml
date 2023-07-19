@@ -299,6 +299,6 @@ models:
   - name: stabilityai/stable-diffusion-2-1
     sha: 5cae40e6a2745ae2b01ad92ae5043f95f23644d6
     tagAs: latest
-  - name: meta-llama/Llama-2-70b-chat-hf
+  - name: meta-llama/llama-2-70b-chat-hf
     sha: 9fd3d5efc9c9d5cae982ecb27862b9d02d19a07e
     tagAs: latest
