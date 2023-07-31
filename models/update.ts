@@ -23,7 +23,7 @@ async function main() {
       const huggingFaceModel = await getHuggingFaceModel(model.name)
       return {
         name: model.name,
-        sha: huggingFaceModel.sha,
+        sha: huggingFaceModel.sha ?? model.sha,
         tagAs: model.tagAs,
       }
     }),
