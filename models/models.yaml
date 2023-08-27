@@ -305,3 +305,6 @@ models:
   - name: thebloke/llama-2-7b-chat-ggml
     sha: b616819cd4777514e3a2d9b8be69824aca8f5daf
     tagAs: latest
+  - name: lllyasviel/controlnet
+    sha: e78a8c4a5052a238198043ee5c0cb44e22abb9f7
+    tagAs: latest
