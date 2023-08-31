@@ -308,3 +308,6 @@ models:
   - name: lllyasviel/controlnet
     sha: e78a8c4a5052a238198043ee5c0cb44e22abb9f7
     tagAs: latest
+  - name: lllyasviel/controlnet-v1-1
+    sha: 69fc48b9cbd98661f6d0288dc59b59a5ccb32a6b
+    tagAs: latest
