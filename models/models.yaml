@@ -302,6 +302,9 @@ models:
   - name: meta-llama/llama-2-70b-chat-hf
     sha: 9fd3d5efc9c9d5cae982ecb27862b9d02d19a07e
     tagAs: latest
+  - name: lmsys/fastchat-t5-3b-v1.0
+    sha: 0b1da230a891854102d749b93f7ddf1f18a81024
+    tagAs: latest
   - name: thebloke/llama-2-7b-chat-ggml
     sha: b616819cd4777514e3a2d9b8be69824aca8f5daf
     tagAs: latest
