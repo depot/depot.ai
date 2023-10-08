@@ -21,7 +21,7 @@ RUN --mount=type=ssh \
   ssh-keyscan hf.co >> ~/.ssh/known_hosts && \
   git clone git@hf.co:${MODEL} /model && \
   cd /model && \
-  git checkout ${SHA} && \
+  git reset --hard ${SHA} && \
   rm -rf .git .gitattributes && \
   find . -newermt "@${SOURCE_DATE_EPOCH}" -writable -xdev | xargs touch --date="@${SOURCE_DATE_EPOCH}" --no-dereference
 
