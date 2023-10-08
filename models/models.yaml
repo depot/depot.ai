@@ -314,3 +314,6 @@ models:
   - name: lllyasviel/controlnet-v1-1
     sha: 69fc48b9cbd98661f6d0288dc59b59a5ccb32a6b
     tagAs: latest
+  - name: mistralai/mistral-7b-v0.1
+    sha: ae9d75c6b4eb39515def78c685fb4d71d49fc2cf
+    tagAs: latest
