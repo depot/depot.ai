@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Outfit"', ...defaultTheme.fontFamily.sans],
-        // mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
+        sans: ['"Red Hat Text Variable"', ...defaultTheme.fontFamily.sans],
+        mono: ['"Red Hat Mono Variable"', ...defaultTheme.fontFamily.mono],
       },
       colors: {
         radix: {
