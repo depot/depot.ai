@@ -16,13 +16,15 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+ENV GIT_LFS_SKIP_SMUDGE=1
 RUN --mount=type=ssh \
+  set -x && \
   mkdir -p ~/.ssh && \
   ssh-keyscan hf.co >> ~/.ssh/known_hosts && \
-  env GIT_LFS_SKIP_SMUDGE=1 git clone git@hf.co:${MODEL} /model && \
+  git clone git@hf.co:${MODEL} /model && \
   cd /model && \
-  git lfs pull && \
   git reset --hard ${SHA} && \
+  git lfs pull && \
   rm -rf .git .gitattributes && \
   find . -newermt "@${SOURCE_DATE_EPOCH}" -writable -xdev | xargs touch --date="@${SOURCE_DATE_EPOCH}" --no-dereference
 
