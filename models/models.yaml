@@ -317,3 +317,6 @@ models:
   - name: mistralai/mistral-7b-v0.1
     sha: ae9d75c6b4eb39515def78c685fb4d71d49fc2cf
     tagAs: latest
+  - name: kandinsky-community/kandinsky-3
+    sha: ecf28061acc4c97f9f5deda61ff26065bbbcb94c
+    tagAs: latest
