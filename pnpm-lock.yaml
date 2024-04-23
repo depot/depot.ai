@@ -9,8 +9,8 @@ dependencies:
     specifier: ^20.10.4
     version: 20.10.4
   hono:
-    specifier: ^3.11.7
-    version: 3.11.7
+    specifier: ^4.2.7
+    version: 4.2.7
   p-queue:
     specifier: ^7.4.1
     version: 7.4.1
@@ -1367,8 +1367,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /hono@3.11.7:
-    resolution: {integrity: sha512-TcfAq7IdipF+9coxnuzYlSSBXbm9mTyWjjagLCv/2ampboNcKJdi+XCK5G48mHQtpI5+9Rj3J4FfcGgw9vzIww==}
+  /hono@4.2.7:
+    resolution: {integrity: sha512-k1xHi86tJnRIVvqhFMBDGFKJ8r5O+bEsT4P59ZK59r0F300Xd910/r237inVfuT/VmE86RQQffX4OYNda6dLXw==}
     engines: {node: '>=16.0.0'}
     dev: false
 
