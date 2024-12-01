@@ -320,3 +320,6 @@ models:
   - name: kandinsky-community/kandinsky-3
     sha: ecf28061acc4c97f9f5deda61ff26065bbbcb94c
     tagAs: latest
+  - name: Doubiiu/ToonCrafter
+    sha: 7c56c5a23d9f8a9d99398e2a2491fff4bd6cffaf
+    tagAs: latest
