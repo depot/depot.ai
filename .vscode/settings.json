@@ -11,7 +11,7 @@
     "astro": "html"
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "eslint.lintTask.enable": true,
   "eslint.lintTask.options": "--cache --cache-location node_modules/.cache/.eslintcache ."
