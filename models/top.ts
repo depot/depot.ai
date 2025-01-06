@@ -12,7 +12,7 @@ async function getTopHuggingFaceModels(topN: number): Promise<Model[]> {
   }
 
   const data: HuggingFaceModel[] = await response.json()
-  return data.map(({id, sha}) => ({name: id.toLowerCase(), sha, tagAs: 'latest'}))
+  return data.map(({id, sha}) => ({name: id.toLowerCase().replaceAll('.', '-'), sha, tagAs: 'latest'}))
 }
 
 async function main() {
