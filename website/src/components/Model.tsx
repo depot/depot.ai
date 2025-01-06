@@ -1,5 +1,5 @@
 import {cx} from 'class-variance-authority'
-import {SVGProps, useCallback, useEffect, useState} from 'react'
+import {SVGProps, useCallback, useEffect, useMemo, useState} from 'react'
 import {useCopyToClipboard} from '../hooks/useCopyToClipboard'
 
 export interface ModelProps {
@@ -20,9 +20,11 @@ export function Model({name, sha, tagAs}: ModelProps) {
     return () => clearTimeout(timeout)
   }, [value])
 
+  const normalizedName = useMemo(() => name.toLowerCase(), [name])
+
   const copyImage = useCallback(() => {
-    copy(`COPY --link --from=depot.ai/${name}:${tagAs} / .`)
-  }, [name, tagAs])
+    copy(`COPY --link --from=depot.ai/${normalizedName}:${tagAs} / .`)
+  }, [normalizedName, tagAs])
 
   return (
     <div className="bg-radix-mauve1 border border-radix-mauve6 px-4 rounded-lg gap-2 flex items-center leading-none justify-between">
@@ -36,7 +38,7 @@ export function Model({name, sha, tagAs}: ModelProps) {
         />
         <div className="tracking-tight whitespace-nowrap md:text-lg py-4 overflow-x-scroll md:overflow-x-hidden overflow-y-hidden">
           <span className="text-radix-mauve11">depot.ai/</span>
-          {name}
+          {normalizedName}
           <span className="text-radix-mauve11">:{tagAs}</span>
         </div>
       </button>

@@ -14,7 +14,7 @@ tag=${3:-latest}
 
 annotations="annotation.org.opencontainers.image.revision=${sha},annotation.org.opencontainers.image.source=https://huggingface.co/${name},annotation-index.org.opencontainers.image.revision=${sha},annotation-index.org.opencontainers.image.source=https://huggingface.co/${name},annotation-manifest-descriptor.org.opencontainers.image.revision=${sha},annotation-manifest-descriptor.org.opencontainers.image.source=https://huggingface.co/${name}"
 
-normalized="$(echo "$name" | tr '[:upper:]' '[:lower:]' | tr '.' '-')"
+normalized="$(echo "$name" | tr '[:upper:]' '[:lower:]')"
 
 depot build . \
   -f "${SCRIPT_DIR}/../models/Dockerfile" \
