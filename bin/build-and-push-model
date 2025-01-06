@@ -14,12 +14,14 @@ tag=${3:-latest}
 
 annotations="annotation.org.opencontainers.image.revision=${sha},annotation.org.opencontainers.image.source=https://huggingface.co/${name},annotation-index.org.opencontainers.image.revision=${sha},annotation-index.org.opencontainers.image.source=https://huggingface.co/${name},annotation-manifest-descriptor.org.opencontainers.image.revision=${sha},annotation-manifest-descriptor.org.opencontainers.image.source=https://huggingface.co/${name}"
 
+normalized="$(echo "$name" | tr '[:upper:]' '[:lower:]')"
+
 depot build . \
   -f "${SCRIPT_DIR}/../models/Dockerfile" \
   --platform linux/amd64,linux/arm64 \
   --build-arg "MODEL=${name}" \
   --build-arg "SHA=${sha}" \
   --build-arg "SOURCE_DATE_EPOCH=0" \
-  --output "type=image,name=us-docker.pkg.dev/depot-gcp/depot-ai/$(echo "$name" | tr '[:upper:]' '[:lower:]'):${tag},push=true,compression=estargz,oci-mediatypes=true,force-compression=true,${annotations}" \
+  --output "type=image,name=us-docker.pkg.dev/depot-gcp/depot-ai/${normalized}:${tag},push=true,compression=estargz,oci-mediatypes=true,force-compression=true,${annotations}" \
   --ssh "default=${SSH_AUTH_SOCK}" \
   --progress plain
