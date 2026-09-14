@@ -1,0 +1,6 @@
+allowBuilds:
+  'esbuild@0.28.1 || 0.28.2': true
+  workerd@1.20260828.1: true
+minimumReleaseAge: 20160
+overrides:
+  sharp: 0.35.4

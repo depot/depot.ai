@@ -1,7 +1,7 @@
 {
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@12.1.0",
   "scripts": {
     "build-all": "tsx models/build.ts",
     "deploy": "wrangler deploy",
@@ -14,27 +14,27 @@
     "update-models": "tsx models/update.ts"
   },
   "dependencies": {
-    "@types/node": "^20.10.4",
-    "hono": "^4.5.8",
-    "p-queue": "^7.4.1",
-    "posthog-node": "^3.2.0",
-    "prettier-plugin-astro": "^0.12.2",
-    "yaml": "^2.3.4",
-    "zod": "^3.22.4"
+    "@types/node": "^26.4.0",
+    "hono": "^4.13.5",
+    "p-queue": "^9.3.3",
+    "posthog-node": "^5.51.4",
+    "prettier-plugin-astro": "^0.14.1",
+    "yaml": "^2.9.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20231121.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.2",
-    "eslint": "^8.55.0",
-    "eslint-config-prettier": "^9.1.0",
-    "execa": "^8.0.1",
-    "prettier": "^3.1.0",
-    "prettier-plugin-organize-imports": "^3.2.4",
-    "prettier-plugin-pkg": "^0.18.0",
-    "tsx": "^4.6.2",
-    "typescript": "^5.3.3",
-    "wrangler": "^3.19.0"
+    "@cloudflare/workers-types": "^5.20260831.1",
+    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/parser": "^8.68.0",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "execa": "^10.0.1",
+    "prettier": "^3.9.6",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-pkg": "^0.22.1",
+    "tsx": "^4.23.13",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.127.1"
   },
   "sideEffects": false,
   "prettier": {
