@@ -1,5 +1,7 @@
 import * as fsp from 'node:fs/promises'
+
 import {stringify} from 'yaml'
+
 import type {Model} from './build'
 
 // Gets the names of the top downloaded models from HuggingFace.
@@ -17,11 +19,9 @@ async function getTopHuggingFaceModels(topN: number): Promise<Model[]> {
 
 async function main() {
   const args = process.argv.slice(2)
-  args.length === 1 ||
-    args.length === 2 ||
-    (() => {
-      throw new Error('Usage: top.ts <topN> [outputFile]')
-    })()
+  if (args.length !== 1 && args.length !== 2) {
+    throw new Error('Usage: top.ts <topN> [outputFile]')
+  }
   if (args.length === 1) {
     args.push('models.yaml')
   }

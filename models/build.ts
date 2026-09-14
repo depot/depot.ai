@@ -1,5 +1,6 @@
-import {$} from 'execa'
 import * as fsp from 'node:fs/promises'
+
+import {$} from 'execa'
 import {parse} from 'yaml'
 
 export interface Model {
@@ -10,10 +11,9 @@ export interface Model {
 
 async function main() {
   const args = process.argv.slice(2)
-  args.length !== 1 ||
-    (() => {
-      throw new Error('Usage: build.ts <modelList>')
-    })()
+  if (args.length === 1) {
+    throw new Error('Usage: build.ts <modelList>')
+  }
 
   const modelListFile = args[1] || 'models/models.yaml'
   const octets = await fsp.readFile(modelListFile, 'utf8')

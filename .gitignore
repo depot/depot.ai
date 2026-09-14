@@ -1,4 +1,5 @@
 .wrangler/
+.astro/
 dist/
 node_modules/
 functions/index.js

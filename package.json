@@ -1,51 +1,36 @@
 {
-  "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.15.0",
+  "type": "module",
+  "sideEffects": false,
   "scripts": {
     "build-all": "tsx models/build.ts",
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "fmt": "prettier --write .",
-    "fmt:check": "prettier --check .",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "lint": "oxlint --deny-warnings .",
+    "lint:fix": "oxlint --fix .",
     "logs": "wrangler tail",
     "top-models": "tsx models/top.ts",
     "type-check": "tsc --noEmit",
     "update-models": "tsx models/update.ts"
   },
   "dependencies": {
-    "@types/node": "^20.10.4",
-    "hono": "^4.5.8",
-    "p-queue": "^7.4.1",
-    "posthog-node": "^3.2.0",
-    "prettier-plugin-astro": "^0.12.2",
-    "yaml": "^2.3.4",
-    "zod": "^3.22.4"
+    "@types/node": "^26.4.0",
+    "hono": "^4.13.5",
+    "p-queue": "^9.3.3",
+    "posthog-node": "^5.51.4",
+    "yaml": "^2.9.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20231121.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.2",
-    "eslint": "^8.55.0",
-    "eslint-config-prettier": "^9.1.0",
-    "execa": "^8.0.1",
-    "prettier": "^3.1.0",
-    "prettier-plugin-organize-imports": "^3.2.4",
-    "prettier-plugin-pkg": "^0.18.0",
-    "tsx": "^4.6.2",
-    "typescript": "^5.3.3",
-    "wrangler": "^3.19.0"
+    "@cloudflare/workers-types": "^5.20260831.1",
+    "execa": "^10.0.1",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.127.1"
   },
-  "sideEffects": false,
-  "prettier": {
-    "bracketSpacing": false,
-    "printWidth": 120,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "plugins": [
-      "prettier-plugin-pkg",
-      "prettier-plugin-organize-imports"
-    ]
-  }
+  "packageManager": "pnpm@12.1.0"
 }

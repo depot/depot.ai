@@ -50,14 +50,14 @@ app.get('/v2/:name{.*}/manifests/:reference', async ({req, env, executionCtx}) =
   if (tag && env.POSTHOG_API_KEY) {
     executionCtx.waitUntil(
       (async () => {
-        const ip = req.headers.get('cf-connecting-ip')
+        const ip = req.header('cf-connecting-ip')
         const posthog = getPostHog(env)
         posthog.capture({
           distinctId: ip ?? 'anonymous',
           event: 'depot.ai: pull image',
           properties: {reference: `${name}:${tag}`, name, tag, digest: digest.digest, $ip: ip, $geoip_disable: false},
         })
-        await posthog.flushAsync()
+        await posthog.flush()
       })(),
     )
   }
@@ -198,7 +198,7 @@ async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
     const upload = await env.storage.createMultipartUpload(key, options)
     console.log(`importing blob ${digest.digest} in ${numberOfParts} parts (ID ${upload.uploadId})`)
     try {
-      const parts: R2UploadedPart[] = new Array(numberOfParts)
+      const parts: R2UploadedPart[] = []
       const queue = new PQueue({concurrency: 4})
       for (let i = 0; i < numberOfParts; i++) {
         const idx = i
@@ -322,7 +322,8 @@ async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key: strin
     return emptyResponse({headers})
   }
 
-  const obj = await env.storage.get(key, {onlyIf: req.headers, range: req.headers})
+  const requestHeaders = req.raw.headers
+  const obj = await env.storage.get(key, {onlyIf: requestHeaders, range: requestHeaders})
   if (!obj) return null
 
   obj.writeHttpMetadata(headers)
@@ -330,7 +331,7 @@ async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key: strin
   headers.set('accept-ranges', 'bytes')
 
   if (
-    req.headers.has('range') &&
+    requestHeaders.has('range') &&
     obj.range &&
     'offset' in obj.range &&
     'length' in obj.range &&
@@ -344,7 +345,7 @@ async function getObject(req: HonoRequest<any>, env: Env['Bindings'], key: strin
   }
 
   const body = 'body' in obj && obj.body ? obj.body : null
-  const status = 'body' in obj && obj.body ? (req.headers.get('range') !== null ? 206 : 200) : 304
+  const status = 'body' in obj && obj.body ? (requestHeaders.get('range') !== null ? 206 : 200) : 304
   console.log('Handling with R2', key, status, obj.range, [...headers.entries()])
   return new Response(body, {headers, status})
 }
