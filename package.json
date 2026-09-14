@@ -1,13 +1,15 @@
 {
-  "type": "module",
   "private": true,
-  "packageManager": "pnpm@12.1.0",
+  "type": "module",
+  "sideEffects": false,
   "scripts": {
     "build-all": "tsx models/build.ts",
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "fmt": "prettier --write .",
-    "fmt:check": "prettier --check .",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "lint": "oxlint --deny-warnings .",
+    "lint:fix": "oxlint --fix .",
     "logs": "wrangler tail",
     "top-models": "tsx models/top.ts",
     "type-check": "tsc --noEmit",
@@ -18,34 +20,17 @@
     "hono": "^4.13.5",
     "p-queue": "^9.3.3",
     "posthog-node": "^5.51.4",
-    "prettier-plugin-astro": "^0.14.1",
     "yaml": "^2.9.0",
     "zod": "^4.5.4"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260831.1",
-    "@typescript-eslint/eslint-plugin": "^8.68.0",
-    "@typescript-eslint/parser": "^8.68.0",
-    "eslint": "^10.9.1",
-    "eslint-config-prettier": "^10.1.8",
     "execa": "^10.0.1",
-    "prettier": "^3.9.6",
-    "prettier-plugin-organize-imports": "^4.3.0",
-    "prettier-plugin-pkg": "^0.22.1",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
     "wrangler": "^4.127.1"
   },
-  "sideEffects": false,
-  "prettier": {
-    "bracketSpacing": false,
-    "printWidth": 120,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "plugins": [
-      "prettier-plugin-pkg",
-      "prettier-plugin-organize-imports"
-    ]
-  }
+  "packageManager": "pnpm@12.1.0"
 }

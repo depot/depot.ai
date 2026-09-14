@@ -1,12 +1,13 @@
 {
-  "type": "module",
   "private": true,
-  "packageManager": "pnpm@12.1.0",
+  "type": "module",
   "scripts": {
     "build": "astro build",
     "dev": "astro dev",
-    "fmt": "prettier --write . src/**/*.astro",
-    "fmt:check": "prettier --check . src/**/*.astro",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "lint": "oxlint --deny-warnings .",
+    "lint:fix": "oxlint --fix .",
     "preview": "astro preview"
   },
   "dependencies": {
@@ -31,34 +32,9 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^26.4.0",
-    "@typescript-eslint/eslint-plugin": "^8.68.0",
-    "@typescript-eslint/parser": "^8.68.0",
-    "eslint": "^10.9.1",
-    "eslint-config-prettier": "^10.1.8",
-    "prettier": "3.9.6",
-    "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-organize-imports": "^4.3.0",
-    "prettier-plugin-pkg": "^0.22.1",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
     "typescript": "^6.0.3"
   },
-  "prettier": {
-    "bracketSpacing": false,
-    "printWidth": 120,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "plugins": [
-      "prettier-plugin-astro",
-      "prettier-plugin-pkg",
-      "prettier-plugin-organize-imports"
-    ],
-    "overrides": [
-      {
-        "files": "*.astro",
-        "options": {
-          "parser": "astro"
-        }
-      }
-    ]
-  }
+  "packageManager": "pnpm@12.1.0"
 }

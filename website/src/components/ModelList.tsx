@@ -1,7 +1,8 @@
 import Fuse from 'fuse.js'
 import {useCallback, useEffect, useMemo, useState} from 'react'
-import {Model, type ModelProps} from './Model'
+
 import {CrossIcon} from './icons'
+import {Model, type ModelProps} from './Model'
 
 export interface ModelListProps {
   models: ModelProps[]

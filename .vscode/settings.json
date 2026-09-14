@@ -2,17 +2,13 @@
   "npm.packageManager": "pnpm",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "prettier.prettierPath": "node_modules/prettier/index.cjs",
-  "prettier.documentSelectors": ["**/*.astro"],
-  "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[javascript][javascriptreact][typescript][typescriptreact][json][jsonc][css][markdown][yaml]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "tailwindCSS.includeLanguages": {
     "astro": "html"
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "eslint.lintTask.enable": true,
-  "eslint.lintTask.options": "--cache --cache-location node_modules/.cache/.eslintcache ."
+    "source.fixAll.oxc": "explicit"
+  }
 }

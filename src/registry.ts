@@ -198,7 +198,7 @@ async function importBlob(env: Env['Bindings'], name: string, digest: Digest) {
     const upload = await env.storage.createMultipartUpload(key, options)
     console.log(`importing blob ${digest.digest} in ${numberOfParts} parts (ID ${upload.uploadId})`)
     try {
-      const parts: R2UploadedPart[] = new Array(numberOfParts)
+      const parts: R2UploadedPart[] = []
       const queue = new PQueue({concurrency: 4})
       for (let i = 0; i < numberOfParts; i++) {
         const idx = i
